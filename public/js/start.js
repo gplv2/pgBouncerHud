@@ -1,4 +1,4 @@
-/*jslint node: true, maxerr: 50, indent: 4 */
+/* jslint node: true, maxerr: 50, indent: 4 */
 
 "use strict";
 
@@ -48,65 +48,30 @@ $( document ).ready(function() {
     };
 
 
-    $( "#reqbutton" ).click(function( event ) {
+    $( "#databases" ).click(function( event ) {
             event.preventDefault();
 
+            $(this).toggleClass('active');
             $('body').css('cursor', 'wait');
 
-            // Get some values from elements on the page:
-            var mt = $("#mediatype").val();
-            var mc = $("#mediacount").val();
-            var ms = $("#mediasession").val();
+            // var mt = $("#soemid").val();
 
             var token = myLocalStorage.get('ngStorage-token');
 
             //var id = $('#userid').val();
-            //var url= "/api/bouncers/"+ id +"/items";
-            var url= "/api/bouncers";
 
-            // Get history data
-            var my_history = new Object();
-
-            $('#cblist input[type=radio]').each(function (i,item) {
-                if($(this).is(':checked')) {
-                    if ( console && console.log ) {
-                        console.log($(this));
-                    }
-                    var name = $(this).closest('div').attr('data-name');
-                    var val = $(this).val();
-                    my_history[name] = val;
-                    console.log(val);
-                    console.log(name);
-                }
-            });
-            // return true;
-
-            var fdata = {};
-
-            /* Gather form data */
-            fdata['type'] = mt;
-            fdata['request_id'] = $('#requestid').val()
-            fdata['quantity'] = parseInt(mc);
-            fdata['session_id'] = parseInt(ms);
-            fdata['exclude'] = [ ];
-            fdata['new_feedback'] = { };
-
-            var size = Object.keys(my_history).length;
-            if (size !== 0) {
-                fdata['new_feedback'] = my_history;
-            }
-
-
-            $('#msg').html('Calling API : <pre class="json">' + library.json.syntaxHighlight(JSON.stringify(fdata, null, 4)) + '</pre>');
+            //var url= "/api/status/"+ id +"/databases";
+            var url= "/api/status/databases";
+            // $('#msg').html('Calling API : <pre class="json">' + library.json.syntaxHighlight(JSON.stringify(token, null, 4)) + '</pre>');
 
             // Filing out the json freeform text field
-            $('#apidata').html(JSON.stringify(fdata));
+            // $('#apidata').html(JSON.stringify(fdata));
 
-            // Assign handlers immediately after making the request,
+            // Assign handlers immediately after making the request
             $.ajax({
-                method: "POST",
+                method: "GET",
                 url: url,
-                data: JSON.stringify(fdata),
+                // data: JSON.stringify(fdata),
                 cache: false,
                 beforeSend: function(xhr, settings) {
                     if (token) {
@@ -118,132 +83,141 @@ $( document ).ready(function() {
                 }
             })
             .done(function( data ) {
+                $('body').css('cursor', 'default');
                 var request_time = new Date().getTime() - start_time;
-                //if ( console && console.log ) {
-                    //console.log( "success" );
+                if ( console && console.log ) {
                     //console.log( data );
-                //}
-
-                $('#map-wrap').empty();
-
-                /* add the results to the empty API pane */
-                $('#map-wrap').append('<form id="myform">');
-                $('#myform').append('<div id="divcblist">');
-                $('#divcblist').append('<fieldset id="cblist">');
-
-/*
-                var container = $('#cblist');
-                var inputs = container.find('input');
-                var id = inputs.length+1;
-*/
-
-                function addOption( hash, crid, recommendation ) {
-                    //console.log(recommendation);
-                    //var crid=Object.keys(recommendation)[0];
-                    //var label=recommendation[crid];
-
-                    $('#cblist').append('<div class="widget" id="widget_'+hash+'" data-name="'+crid+'">');
-                    // $('#widget_'+hash).append('<h3>'+recommendation+'</>');
-                    $('#widget_'+hash).append('<fieldset id="fset_' + hash + '">');
-                    $('#fset_' + hash).append('<legend>'+recommendation.title+':</legend>');
-
-                    var optioncontainer = $('#fset_' + hash);
-                    $('<input />', { type: 'radio', id: 'radio1_'+hash , name: 'radio_group_'+hash, value: 'positive' }).appendTo(optioncontainer);
-                    $('<label />', { 'for': 'radio1_'+hash, text: 'Positive' }).appendTo(optioncontainer);
-
-                    $('<input />', { type: 'radio', id: 'radio2_'+hash , name: 'radio_group_'+hash, value: 'neutral' }).appendTo(optioncontainer);
-                    $('<label />', { 'for': 'radio2_'+hash, text: 'Neutral' }).appendTo(optioncontainer);
-
-                    $('<input />', { type: 'radio', id: 'radio3_'+hash , name: 'radio_group_'+hash, value: 'negative' }).appendTo(optioncontainer);
-                    $('<label />', { 'for': 'radio3_'+hash, text: 'Negative' }).appendTo(optioncontainer);
-
-                    //$('<input />', { type: 'radio', id: 'radio0_'+hash , name: 'radio_group_'+hash}).appendTo(optioncontainer);
-                    //$('<label />', { 'for': 'radio0_'+hash, text: 'None' }).appendTo(optioncontainer);
-
-                    $( "#fset_"+hash+" > input" ).checkboxradio();
-                    $( "#fset_"+hash).controlgroup();
                 }
 
-                $.each(data.recommendations, function(i, recommendation) {
+                $('#mainview').empty();
 
-                    var hash = md5(recommendation.crid); // "2063c1608d6e0baf80249c42e2be5804"
+                function addOption( hash, res, bouncer ) {
+                    //console.log(bouncer);
+                    //var uniqueid=Object.keys(bouncers)[0];
+                    //var label=bouncers[uniqueid];
 
-                    var $myDiv = $('#'+ 'cb' + hash);
-                    if (! $myDiv.length){
-                        //console.log( recommendation );
-                        addOption( hash, recommendation.crid, recommendation );
-                    }
-                });
+//                 <tr> <td>db1</td> <td></td> <td>6101</td> <td>d22mpo16g6ti4b</td> <td></td> <td>1</td> <td>1</td> <td></td> <td>100</td> <td>1</td> </tr>
+ //                <tr> <td>pgbouncer</td> <td></td> <td>6001</td> <td>pgbouncer</td> <td>pgbouncer</td> <td>2</td> <td>0</td> <td>statement</td> <td>100</td> <td>0</td> </tr>
 
-                /* none of the above option */
-                //var container = $('#divcblist');
+                    // $('#widget_'+hash).append('<h3>'+bouncers+'</>');
 
-                $('#cblist').append('<form class="widget" id="cb_none_div">');
-                var container = $('#cb_none_div');
-                $('<input />', { type: 'checkbox', id: 'cb_none', value: 'None of the above', class:'' }).appendTo(container);
-                $('<label />', { 'for': 'cb_none', text: 'None of the above' , class: 'col-md-offset-0 col-md-3 control-label' , style: 'margin-top: 15px'}).appendTo(container);
-                $('#cb_none_div > input').checkboxradio();
+                    $('#tbd_' + hash).append('<tr> <td>'+bouncer.label+'</td> <td>'+res.host+'</td> <td>'+res.port+'</td> <td>'+res.database+'</td> <td>'+res.force_user+'</td> <td>'+res.pool_size+'</td> <td>'+res.reserve_pool+'</td> <td>'+res.pool_mode+'</td> <td>'+res.max_connections+'</td> <td>'+res.current_connections+'</td> </tr>');
+                }
 
-                $('<button />', { type: 'button', id: 'recmore', text:'Again' , class: "btn btn-primary pull-left col-md-offset-0 col-md-2" , style: 'margin-top: 15px; margin-left: 10px'}).appendTo(container);
+                //console.log(data);
 
-                $( '#recmore').click( function( event ) {
-                    $( "#reqbutton" ).click();
-                });
+                $.each(data, function(i, bouncers) {
+                    var hash = md5(bouncers.info.id); // "2063c1608d6e0baf80249c42e2be5804"
+                    var bid= bouncers.info.id;
+                    var blab= bouncers.info.label;
+                    var info= bouncers.info;
+                    //console.log( bouncers.info );
+                    //console.log( bouncers.results );
 
-                $('#cb_none_div > input').click(function( event ) {
-                    event.preventDefault();
-                    $('#cblist input[type=radio]').each(function (i,item) {
-                        //if ( console && console.log ) {
-                            //console.log($(item).val());
-                        //}
-                        if($(item).val() == 'negative') {
-                            $(this).click();
-                            //$(this).prop("checked", true);
-                        }
+                    $('#mainview').append('<div id="bouncer_'+bid+'">'+blab+'</div>');
+                    $('#bouncer_'+bid).append('<div id="divcblist_'+bid+'">');
+                    $('#divcblist_'+bid).append('<div id="cblist_'+bid+'">');
+
+                    $('#cblist_'+bid).append('<h4 class="ui header"><div class="content">Poolers</div></h4>');
+                    $('#cblist_'+bid).append('<div class="" id="widget_'+hash+'" data-name="'+hash+'">');
+
+                    $('#widget_'+hash).append('<table id="tset_' + hash + '" class="ui compact table">');
+                    $('#tset_'+hash).append('<thead id="tha_' + hash + '"/>');
+                    $('#tset_'+hash).append('<tbody id="tbd_' + hash + '"/>');
+                    $('#tha_'+hash).append('<tr> <th>Name</th> <th>Host</th> <th>Port</th> <th>Database</th> <th>Force User</th> <th>Pool Size</th> <th>Reserve Pool</th> <th>Pool Mode</th> <th>Max Connections</th> <th>Current Connections</th></tr>');
+
+                    $.each(bouncers.results, function(i, database) {
+                        addOption( hash, database, info );
                     });
                 });
-
-/*
-                $('#cblist input[type=radio]:nth-child(2)').each(function (i,item) {
-                    if($(this).is(':checked')) {
-                        console.log($(this));
-                    }
-                });
-*/
-                $( "#testbutton" ).click(function( event ) {
-                    event.preventDefault();
-                    $('#cblist input[type=radio]').each(function (i,item) {
-                        if($(this).is(':checked')) {
-                            //console.log($(this).closest('div').attr('data-name'));
-                            //if ( console && console.log ) {
-                                console.log($(this));
-                                //console.log($(this).closest('div'));
-                            //}
-                        }
-                    });
-                });
-
-                $('#msg').append('<p>Success API : ' + JSON.stringify(data) + ' (in ' + request_time + 'ms.)</p>');
-                $('#msg > p:last-child').removeClass().addClass("alert alert-success");
-            })
-            .fail(function( data ) {
-                var request_time = new Date().getTime() - start_time;
-                $('#msg').append('<div>Failure API : ' + JSON.stringify(data.responseJSON) + ' (in ' + request_time + 'ms.) </div>');
-                $('#msg > div:last-child').removeClass().addClass("alert alert-warning");
-                //if ( console && console.log ) {
-                    //console.log(data);
-                    //console.log( "error" );
-                //}
-                return false;
-            })
-            .always(function() {
-                $('body').css('cursor', 'default');
-                $('#msg').append('<p>Status API : Request finished<p>');
-                //if ( console && console.log ) {
-                    //console.log( "finished" );
-                //}
             });
       });
+
+    $( "#stats" ).click(function( event ) {
+            event.preventDefault();
+
+            $(this).toggleClass('active');
+            $('body').css('cursor', 'wait');
+
+            // var mt = $("#soemid").val();
+
+            var token = myLocalStorage.get('ngStorage-token');
+
+            //var id = $('#userid').val();
+
+            //var url= "/api/status/"+ id +"/databases";
+            var url= "/api/status/stats";
+            // $('#msg').html('Calling API : <pre class="json">' + library.json.syntaxHighlight(JSON.stringify(token, null, 4)) + '</pre>');
+
+            // Filing out the json freeform text field
+            // $('#apidata').html(JSON.stringify(fdata));
+
+            // Assign handlers immediately after making the request
+            $.ajax({
+                method: "GET",
+                url: url,
+                // data: JSON.stringify(fdata),
+                cache: false,
+                beforeSend: function(xhr, settings) {
+                    if (token) {
+                        xhr.setRequestHeader('Authorization','Bearer ' + token);
+                    }
+                    xhr.setRequestHeader('Content-Type', 'application/json');
+                    xhr.overrideMimeType( 'application/json' );
+                    start_time = new Date().getTime();
+                }
+            })
+            .done(function( data ) {
+                $('body').css('cursor', 'default');
+                var request_time = new Date().getTime() - start_time;
+                if ( console && console.log ) {
+                    console.log( data );
+                }
+
+                $('#mainview').empty();
+
+                function addOption( hash, res, bouncer ) {
+                    //console.log(bouncer);
+                    //var uniqueid=Object.keys(bouncers)[0];
+                    //var label=bouncers[uniqueid];
+
+//                 <tr> <td>db1</td> <td></td> <td>6101</td> <td>d22mpo16g6ti4b</td> <td></td> <td>1</td> <td>1</td> <td></td> <td>100</td> <td>1</td> </tr>
+ //                <tr> <td>pgbouncer</td> <td></td> <td>6001</td> <td>pgbouncer</td> <td>pgbouncer</td> <td>2</td> <td>0</td> <td>statement</td> <td>100</td> <td>0</td> </tr>
+
+                    // $('#widget_'+hash).append('<h3>'+bouncers+'</>');
+
+                    $('#tbd_' + hash).append('<tr> <td>'+res.database+'</td> <td>'+res.total_requests+'</td> <td>'+res.total_received+'</td> <td>'+res.total_sent+'</td> <td>'+res.total_query_time+'</td> <td>'+res.avg_req+'</td> <td>'+res.avg_recv+'</td> <td>'+res.avg_sent+'</td> <td>'+res.avg_query+'</td></tr>');
+                }
+
+                //console.log(data);
+
+                $.each(data, function(i, bouncers) {
+                    var hash = md5(bouncers.info.id); // "2063c1608d6e0baf80249c42e2be5804"
+                    var bid= bouncers.info.id;
+                    var blab= bouncers.info.label;
+                    var info= bouncers.info;
+                    //console.log( bouncers.info );
+                    //console.log( bouncers.results );
+
+                    $('#mainview').append('<div id="bouncer_'+bid+'">'+blab+'</div>');
+                    $('#bouncer_'+bid).append('<div id="divcblist_'+bid+'">');
+                    $('#divcblist_'+bid).append('<div id="cblist_'+bid+'">');
+
+                    $('#cblist_'+bid).append('<h4 class="ui header"><div class="content">Poolers</div></h4>');
+                    $('#cblist_'+bid).append('<div class="" id="widget_'+hash+'" data-name="'+hash+'">');
+
+                    $('#widget_'+hash).append('<table id="tset_' + hash + '" class="ui compact table">');
+                    $('#tset_'+hash).append('<thead id="tha_' + hash + '"/>');
+                    $('#tset_'+hash).append('<tbody id="tbd_' + hash + '"/>');
+                    $('#tha_'+hash).append('<tr> <th>Database</th> <th>Total requests</th> <th>Total received</th> <th>Total Sent</th> <th>Total query time</th> <th>Avg Req</th> <th>Avg Recv</th> <th>Avg Sent</th> <th>Avg Query</th></tr>');
+
+                    $.each(bouncers.results, function(i, database) {
+                        addOption( hash, database, info );
+                    });
+                });
+            });
+      });
+
 
     $( "#allreqbutton" ).click(function( event ) {
             event.preventDefault();
@@ -292,12 +266,12 @@ $( document ).ready(function() {
                     //console.log( data );
                 //}
 
-                $('#msg').append('<p>Success API : ' + JSON.stringify(data) + ' (in ' + request_time + 'ms.)</p>');
+                $('#msg').html('<p>Success API : ' + JSON.stringify(data) + ' (in ' + request_time + 'ms.)</p>');
                 $('#msg > p:last-child').removeClass().addClass("alert alert-success");
             })
             .fail(function( data ) {
                 var request_time = new Date().getTime() - start_time;
-                $('#msg').append('<div>Failure API : ' + JSON.stringify(data.responseJSON) + ' (in ' + request_time + 'ms.) </div>');
+                $('#msg').html('<div>Failure API : ' + JSON.stringify(data.responseJSON) + ' (in ' + request_time + 'ms.) </div>');
                 $('#msg > div:last-child').removeClass().addClass("alert alert-warning");
                 //if ( console && console.log ) {
                     //console.log(data);
@@ -307,7 +281,7 @@ $( document ).ready(function() {
             })
             .always(function() {
                 $('body').css('cursor', 'default');
-                $('#msg').append('<p>Status API : Request finished<p>');
+                //$('#msg').append('<p>Status API : Request finished<p>');
                 //if ( console && console.log ) {
                     //console.log( "finished" );
                 //}
@@ -410,8 +384,6 @@ $( document ).ready(function() {
                         $(this).parent().remove();
                     }
                 });
-                // console.log (my_history);
-
 /*
                 //if ($(this).is(":checked"))
 */
@@ -432,7 +404,7 @@ $( document ).ready(function() {
                 // $('#myform').append('</fieldset></div>');
                 // $('#map-wrap').append('</form');
 
-                $('#msg').append('<p>Success API : ' + JSON.stringify(data) + '</p>');
+                $('#msg').html('<p>Success API : ' + JSON.stringify(data) + '</p>');
             })
             .fail(function( data ) {
                 if ( console && console.log ) {
@@ -463,8 +435,6 @@ $( document ).ready(function() {
             $('#msg').html('<p>Resetting session</p>');
             $('body').css('cursor', 'wait');
             $('#map-wrap').empty();
-
-            // for (var member in my_history) delete my_history[member];
 
             $('#apidata').empty();
             $('body').css('cursor', 'default');

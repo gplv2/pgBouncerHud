@@ -208,51 +208,29 @@ fieldset {
 <div class="container-fluid">
   <div class="row-fluid">
     <!--Sidebar content-->
-    <div class="col-sm-3 col-md-12 sidebar sidebar-left pull-left">
+    <div class="col-sm-12 col-md-12 sidebar sidebar-left pull-left">
       <!--Injected angular content-->
             <div class="panel panel-default" ng-view=""></div>
       <!--Body content-->
             <div class="panel panel-default">
                 <div class="panel-heading">
-                  Bouncer status overview
+                  Bouncer overview
                 </div>
 
                 <div class="panel-body" id="map-wrap">
                     <div class="pusher">
                     <div class="ui main container">
-                        <div class="row-fluid" id="flash"></div>
-                    <div class="ui pointing menu">
-                        <div class="header item">default &gt; primary</div>
-                        <a class="item active" href="/default/primary/databases">Databases</a>
-                        <a class="item " href="/default/primary/stats">Stats</a>
-                        <a class="item " href="/default/primary/pools">Pools</a>
-                        <a class="item " href="/default/primary/clients">Clients</a>
-                        <a class="item " href="/default/primary/conf">Configuration</a>
-                        <div class="right menu">
-                            <div class="item">
-                                <a class="ui button basic positive button" data-confirm="Are you sure?" data-remote="true" rel="nofollow" data-method="post" href="/default/primary/reload">Reload</a>
-                            </div>
-                            <div class="item">
-                                <a class="ui button basic primary button" data-confirm="Are you sure?" data-remote="true" rel="nofollow" data-method="post" href="/default/primary/suspend">Suspend</a>
-                            </div>
-                            <div class="item">
-                                <a class="ui button basic negative button" data-confirm="Are you sure?" data-remote="true" rel="nofollow" data-method="post" href="/default/primary/shutdown">Shutdown</a>
-                            </div>
+                        <div class="row-fluid" id="flash">
+                            <a id="databases" class="item " href="#/databases">Databases</a>
+                            <a id="stats" class="item " href="#/stats">Stats</a>
+                            <a id="pools" class="item " href="#/pools">Pools</a>
+                            <a id="clients" class="item " href="#/clients">Clients</a>
+                            <a id="configuration" class="item " href="#/conf">Configuration</a>
+                        </div>
+                        <div id="mainview" class="ui pointing menu">
+                            <div class="header item">bouncer &gt; role</div>
                         </div>
                     </div>
-                    <div class="ui active segment">
-                        <h4 class="ui header"> <div class="content">Databases</div> </h4>
-                        <table class="ui compact table">
-                        <thead>
-                            <tr> <th>Name</th> <th>Host</th> <th>Port</th> <th>Database</th> <th>Force User</th> <th>Pool Size</th> <th>Reserve Pool</th> <th>Pool Mode</th> <th>Max Connections</th> <th>Current Connections</th></tr>
-                        </thead>
-                        <tbody>
-                            <tr> <td>db1</td> <td></td> <td>6101</td> <td>d22mpo16g6ti4b</td> <td></td> <td>1</td> <td>1</td> <td></td> <td>100</td> <td>1</td> </tr>
-                            <tr> <td>pgbouncer</td> <td></td> <td>6000</td> <td>pgbouncer</td> <td>pgbouncer</td> <td>2</td> <td>0</td> <td>statement</td> <td>100</td> <td>0</td> </tr>
-                        </tbody>
-                        </table>
-                    </div>
-                </div>
                  <div class="panel-footer">
                      <div id="msg" class="break-word notice info"></div>
                 </div>
