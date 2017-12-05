@@ -45,6 +45,7 @@
         "post-install-cmd": [
             "Illuminate\\Foundation\\ComposerScripts::postInstall",
             "php -r \"copy('.env.example', '.env');\"",
+            "php -r \"copy('scripts/PostgresConnector.php', 'vendor/laravel/framework/src/Illuminate/Database/Connectors/PostgresConnector.php');\"",
             "php artisan optimize",
             "php artisan key:generate"
         ],
