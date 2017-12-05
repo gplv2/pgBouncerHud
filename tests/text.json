@@ -1,0 +1,1 @@
+{"timeout":3,"type":"getbouncers","user_id":8777,"request_id":12345,"bouncerlist":{"bouncer_id_id_1":"yes","bouncer_id_id_2":"yes","bouncer_id_id_3":"yes"},"exclude":["bouncer_id_id_6","bouncer_id_id_7","bouncer_id_id_8"]}

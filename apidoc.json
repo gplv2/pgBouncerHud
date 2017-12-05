@@ -1,0 +1,11 @@
+{
+  "name": "PGBH API",
+  "version": "1.0.0",
+  "description": "PGBH API Documentation",
+  "title": "PGBH API",
+  "url" : "http://docs.phhb.lan",
+  "template": {
+  	"withCompare": true,
+  	"withGenerator": true
+  }
+}

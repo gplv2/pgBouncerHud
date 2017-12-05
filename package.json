@@ -1,0 +1,14 @@
+{
+  "private": true,
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-uglify": "^2.0.0"
+  },
+  "dependencies": {
+    "laravel-elixir": "^5.0.0",
+    "bootstrap-sass": "^3.3.0",
+    "apidoc": "^0.16.1"
+  },
+  "version": "1.0.1",
+  "author": "Glenn Plas"
+}
