@@ -107,6 +107,8 @@ $( document ).ready(function() {
                 //console.log(data);
 
                 $.each(data, function(i, bouncers) {
+                    var soft_error = JSON.parse(JSON.stringify(data.responseJSON));
+
                     var hash = md5(bouncers.info.id); // "2063c1608d6e0baf80249c42e2be5804"
                     var bid= bouncers.info.id;
                     var blab= bouncers.info.label;

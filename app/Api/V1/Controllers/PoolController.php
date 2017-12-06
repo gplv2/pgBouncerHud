@@ -89,7 +89,7 @@ class PoolController extends Controller
         }
 
         if (!count($bouncers)) {
-            $resultsset = array('error' => '403', 'error message' => sprintf('No bouncers found'));
+            $resultsset = array('error' => '505', 'message' => sprintf('No bouncers found'));
             return response()->json($resultsset,500);
         }
 
@@ -193,17 +193,17 @@ class PoolController extends Controller
                     //echo $e->getMessage();
                     // echo $e->getCode();
                     if ((int)$e->getCode() === 7) {
-                        $resultsset[$bouncer->label] = array('error' => '402', 'warning message' => sprintf('problem with pgbouncer : %s', $e->getMessage() ));
+                        $resultsset[$bouncer->label] = array('error' => '402', 'message' => sprintf('problem with pgbouncer : %s', $e->getMessage() ));
                     } else {
-                        return response()->json(array('error' => '402', 'error message' => sprintf('problem with pgbouncer : %s', $e->getMessage())), 500);
+                        return response()->json(array('error' => '502', 'message' => sprintf('problem with pgbouncer : %s', $e->getMessage())), 500);
                     }
                 } catch(Exception $e) {
                     // Log::info('Error: user', array($e->getMessage()));
                     //echo $e->getMessage();
-                    return response()->json(array('error' => '404', 'error message' => sprintf('problem : %s', $e->getMessage())), 500);
+                    return response()->json(array('error' => '401', 'message' => sprintf('problem : %s', $e->getMessage())), 500);
                 }
             } else {
-                $resultsset[$bouncer->label] = array('error' => '401', 'warning message' => sprintf('problem with DB dsn: %s',$bouncer->label));
+                $resultsset[$bouncer->label] = array('error' => '501', 'message' => sprintf('problem with DB dsn: %s',$bouncer->label));
             }
             //var_dump($resultsset);
         };
@@ -224,7 +224,7 @@ class PoolController extends Controller
         }
 
         if (!count($bouncers)) {
-            $resultsset = array('error' => '403', 'error message' => sprintf('No bouncers found'));
+            $resultsset = array('error' => '505', 'message' => sprintf('No bouncers found'));
             return response()->json($resultsset,500);
         }
 
@@ -325,10 +325,10 @@ class PoolController extends Controller
                     //if ((int)$ex->getCode() === 23505)
                     //return $this->response->error('Problem with command on backend', 500);
                     // var_dump($ex->getMessage());
-                    $resultsset[$bouncer->label] = array('error' => '402', 'warning message' => sprintf('problem with pgbouncer query: %s', $ex->getMessage() ));
+                    $resultsset[$bouncer->label] = array('error' => '402', 'message' => sprintf('problem with pgbouncer query: %s', $ex->getMessage() ));
                 }
             } else {
-                $resultsset[$bouncer->label] = array('error' => '401', 'warning message' => sprintf('problem with DB dsn: %s',$bouncer->label));
+                $resultsset[$bouncer->label] = array('error' => '401', 'message' => sprintf('problem with DB dsn: %s',$bouncer->label));
                 // Log::info('Error: user', array($ex->getMessage()));
             }
             //var_dump($resultsset);
@@ -350,7 +350,7 @@ class PoolController extends Controller
         }
 
         if (!count($bouncers)) {
-            $resultsset = array('error' => '403', 'error message' => sprintf('No bouncers found'));
+            $resultsset = array('error' => '505', 'message' => sprintf('No bouncers found'));
             return response()->json($resultsset,500);
         }
 
@@ -451,10 +451,10 @@ class PoolController extends Controller
                     //if ((int)$ex->getCode() === 23505)
                     //return $this->response->error('Problem with command on backend', 500);
                     // var_dump($ex->getMessage());
-                    $resultsset[$bouncer->label] = array('error' => '402', 'warning message' => sprintf('problem with pgbouncer query: %s', $ex->getMessage() ));
+                    $resultsset[$bouncer->label] = array('error' => '402', 'message' => sprintf('problem with pgbouncer query: %s', $ex->getMessage() ));
                 }
             } else {
-                $resultsset[$bouncer->label] = array('error' => '401', 'warning message' => sprintf('problem with DB dsn: %s',$bouncer->label));
+                $resultsset[$bouncer->label] = array('error' => '401', 'message' => sprintf('problem with DB dsn: %s',$bouncer->label));
                 // Log::info('Error: user', array($ex->getMessage()));
             }
             //var_dump($resultsset);
