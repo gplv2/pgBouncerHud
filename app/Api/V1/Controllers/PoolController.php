@@ -83,9 +83,9 @@ class PoolController extends Controller
         $response->header('charset', 'utf-8');
 
         if (!empty($buid)){
-            $bouncers = Bouncer::where('id', '=', $buid)->get();
+            $bouncers = Bouncer::where([ ['id', '=', $buid], ['enabled', '=', 'true' ] ])->get();
         } else {
-            $bouncers = Bouncer::all();
+            $bouncers = Bouncer::where('enabled', '=', 'true')->get();
         }
 
         if (!count($bouncers)) {
@@ -209,9 +209,9 @@ class PoolController extends Controller
         $response->header('charset', 'utf-8');
 
         if (!empty($buid)){
-            $bouncers = Bouncer::where('id', '=', $buid)->get();
+            $bouncers = Bouncer::where([ ['id', '=', $buid], ['enabled', '=', 'true' ] ])->get();
         } else {
-            $bouncers = Bouncer::all();
+            $bouncers = Bouncer::where('enabled', '=', 'true')->get();
         }
 
         if (!count($bouncers)) {
