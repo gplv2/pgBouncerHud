@@ -113,15 +113,16 @@ $( document ).ready(function() {
                     var info= bouncers.info;
                     //console.log( bouncers.info );
                     //console.log( bouncers.results );
+                    //console.log(info);
 
-                    $('#mainview').append('<div id="bouncer_'+bid+'">'+blab+'</div>');
+                    $('#mainview').append('<div id="bouncer_'+bid+'"><h3>'+blab+' ('+info.dsns.host+')</h3></div>');
                     $('#bouncer_'+bid).append('<div id="divcblist_'+bid+'">');
                     $('#divcblist_'+bid).append('<div id="cblist_'+bid+'">');
 
-                    $('#cblist_'+bid).append('<h4 class="ui header"><div class="content">Poolers</div></h4>');
+                    $('#cblist_'+bid).append('<h4 class="ui header"><div class="content">Databases</div></h4>');
                     $('#cblist_'+bid).append('<div class="" id="widget_'+hash+'" data-name="'+hash+'">');
 
-                    $('#widget_'+hash).append('<table id="tset_' + hash + '" class="ui compact table">');
+                    $('#widget_'+hash).append('<table id="tset_' + hash + '" class="table table-striped table-bordered">');
                     $('#tset_'+hash).append('<thead id="tha_' + hash + '"/>');
                     $('#tset_'+hash).append('<tbody id="tbd_' + hash + '"/>');
                     $('#tha_'+hash).append('<tr> <th>Name</th> <th>Host</th> <th>Port</th> <th>Database</th> <th>Force User</th> <th>Pool Size</th> <th>Reserve Pool</th> <th>Pool Mode</th> <th>Max Connections</th> <th>Current Connections</th></tr>');
@@ -129,6 +130,8 @@ $( document ).ready(function() {
                     $.each(bouncers.results, function(i, database) {
                         addOption( hash, database, info );
                     });
+
+                    $('#tset_'+hash).DataTable();
                 });
             });
       });
@@ -199,11 +202,11 @@ $( document ).ready(function() {
                     //console.log( bouncers.info );
                     //console.log( bouncers.results );
 
-                    $('#mainview').append('<div id="bouncer_'+bid+'">'+blab+'</div>');
+                    $('#mainview').append('<div id="bouncer_'+bid+'"><h3>'+blab+' ('+info.dsns.host+')</h3></div>');
                     $('#bouncer_'+bid).append('<div id="divcblist_'+bid+'">');
                     $('#divcblist_'+bid).append('<div id="cblist_'+bid+'">');
 
-                    $('#cblist_'+bid).append('<h4 class="ui header"><div class="content">Poolers</div></h4>');
+                    $('#cblist_'+bid).append('<h4 class="ui header"><div class="content">Databases</div></h4>');
                     $('#cblist_'+bid).append('<div class="" id="widget_'+hash+'" data-name="'+hash+'">');
 
                     $('#widget_'+hash).append('<table id="tset_' + hash + '" class="ui compact table">');
@@ -217,6 +220,82 @@ $( document ).ready(function() {
                 });
             });
       });
+
+    $( "#pools" ).click(function( event ) {
+            event.preventDefault();
+
+            $(this).toggleClass('active');
+            $('body').css('cursor', 'wait');
+
+            // var mt = $("#soemid").val();
+
+            var token = myLocalStorage.get('ngStorage-token');
+
+            //var id = $('#userid').val();
+
+            //var url= "/api/status/"+ id +"/databases";
+            var url= "/api/status/pools";
+            // $('#msg').html('Calling API : <pre class="json">' + library.json.syntaxHighlight(JSON.stringify(token, null, 4)) + '</pre>');
+
+            // Filing out the json freeform text field
+            // $('#apidata').html(JSON.stringify(fdata));
+
+            // Assign handlers immediately after making the request
+            $.ajax({
+                method: "GET",
+                url: url,
+                // data: JSON.stringify(fdata),
+                cache: false,
+                beforeSend: function(xhr, settings) {
+                    if (token) {
+                        xhr.setRequestHeader('Authorization','Bearer ' + token);
+                    }
+                    xhr.setRequestHeader('Content-Type', 'application/json');
+                    xhr.overrideMimeType( 'application/json' );
+                    start_time = new Date().getTime();
+                }
+            })
+            .done(function( data ) {
+                $('body').css('cursor', 'default');
+                var request_time = new Date().getTime() - start_time;
+
+                $('#mainview').empty();
+
+                function addOption( hash, res, bouncer ) {
+                if ( console && console.log ) {
+                    //console.log(res);
+                }
+                    $('#tbd_' + hash).append('<tr> <td>'+res.database+'</td> <td>'+res.user+'</td> <td>'+res.cl_active+'</td> <td>'+res.cl_waiting+'</td> <td>'+res.sv_active+'</td> <td>'+res.sv_idle+'</td> <td>'+res.sv_used+'</td> <td>'+res.sv_tested+'</td> <td>'+res.sv_login+'</td> <td>'+res.maxwait+'</td> </tr>');
+                }
+
+                //console.log(data);
+
+                $.each(data, function(i, bouncers) {
+                    var hash = md5(bouncers.info.id); // "2063c1608d6e0baf80249c42e2be5804"
+                    var bid= bouncers.info.id;
+                    var blab= bouncers.info.label;
+                    var info= bouncers.info;
+
+                    $('#mainview').append('<div id="bouncer_'+bid+'"><h3>'+blab+' ('+info.dsns.host+')</h3></div>');
+                    $('#bouncer_'+bid).append('<div id="divcblist_'+bid+'">');
+                    $('#divcblist_'+bid).append('<div id="cblist_'+bid+'">');
+
+                    $('#cblist_'+bid).append('<h4 class="ui header"><div class="content">Databases</div></h4>');
+                    $('#cblist_'+bid).append('<div class="" id="widget_'+hash+'" data-name="'+hash+'">');
+
+                    $('#widget_'+hash).append('<table id="tset_' + hash + '" class="ui compact table">');
+                    $('#tset_'+hash).append('<thead id="tha_' + hash + '"/>');
+                    $('#tset_'+hash).append('<tbody id="tbd_' + hash + '"/>');
+                    $('#tha_'+hash).append('<tr> <th>Database</th> <th>User</th> <th>Cl Active</th> <th>Cl Waiting</th> <th>Sv Active</th> <th>Sv Idle</th> <th>Sv Used</th> <th>Sv Tested</th> <th>Sv Login</th> <th>MaxWait</th> </tr>');
+                    // console.log(bouncers);
+
+                    $.each(bouncers.results, function(i, database) {
+                        addOption( hash, database, info );
+                    });
+                });
+            });
+      });
+
 
 
     $( "#allreqbutton" ).click(function( event ) {

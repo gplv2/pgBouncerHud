@@ -62,7 +62,7 @@ class PoolController extends Controller
         // return view('bouncer.show', compact('bouncer', 'category'));
     }
 
-    public function index(Request $request, $buid)
+    public function index(Request $request, $buid=null)
     {
         $currentUser = JWTAuth::parseToken()->authenticate();
 
@@ -157,7 +157,7 @@ class PoolController extends Controller
                 // DB::setAttribute('PDO::PGSQL_ATTR_DISABLE_NATIVE_PREPARED_STATEMENT' , true);
                 // DB::connection('pgbouncer')  setDefaultOptions
                 Config::set('database.connections.pgbouncer.simple', 'true' );
-                Config::set('database.connections.pgbouncer.options', [ \PDO::ATTR_EMULATE_PREPARES => true ] );
+                Config::set('database.connections.pgbouncer.options', [ \PDO::ATTR_EMULATE_PREPARES => true , \PDO::ATTR_TIMEOUT => 2 ] );
                 //Config::set('database.connections.pgbouncer.database', 'bouncerhud');
                 //Config::set('database.connections.pgbouncer.schema', ltrim($dsn['path'],'/'));
                 //var_dump(Config::get('database.connections.pgbouncer'));
@@ -186,15 +186,24 @@ class PoolController extends Controller
                     //}
                     $resultsset[$bouncer->label] = array('results' => $results, 'info' => $bouncer);
                     //return response()->json($results,200);
-                } catch(\Illuminate\Database\QueryException $ex){
-                    //if ((int)$ex->getCode() === 23505)
+                } catch(\Illuminate\Database\QueryException $e){
+                    // var_dump($e->getMessage());
+                } catch(\PDOException $e) {
                     //return $this->response->error('Problem with command on backend', 500);
-                    // var_dump($ex->getMessage());
-                    $resultsset[$bouncer->label] = array('error' => '402', 'warning message' => sprintf('problem with pgbouncer query: %s', $ex->getMessage() ));
+                    //echo $e->getMessage();
+                    // echo $e->getCode();
+                    if ((int)$e->getCode() === 7) {
+                        $resultsset[$bouncer->label] = array('error' => '402', 'warning message' => sprintf('problem with pgbouncer : %s', $e->getMessage() ));
+                    } else {
+                        return response()->json(array('error' => '402', 'error message' => sprintf('problem with pgbouncer : %s', $e->getMessage())), 500);
+                    }
+                } catch(Exception $e) {
+                    // Log::info('Error: user', array($e->getMessage()));
+                    //echo $e->getMessage();
+                    return response()->json(array('error' => '404', 'error message' => sprintf('problem : %s', $e->getMessage())), 500);
                 }
             } else {
                 $resultsset[$bouncer->label] = array('error' => '401', 'warning message' => sprintf('problem with DB dsn: %s',$bouncer->label));
-                // Log::info('Error: user', array($ex->getMessage()));
             }
             //var_dump($resultsset);
         };
@@ -327,7 +336,133 @@ class PoolController extends Controller
         return response()->json($resultsset,200);
     }
 
-    public function pools(Request $request, $buid)
+    public function pools(Request $request, $buid=null)
+    {
+        $currentUser = JWTAuth::parseToken()->authenticate();
+
+        $response = new Response();
+        $response->header('charset', 'utf-8');
+
+        if (!empty($buid)){
+            $bouncers = Bouncer::where([ ['id', '=', $buid], ['enabled', '=', 'true' ] ])->get();
+        } else {
+            $bouncers = Bouncer::where('enabled', '=', 'true')->get();
+        }
+
+        if (!count($bouncers)) {
+            $resultsset = array('error' => '403', 'error message' => sprintf('No bouncers found'));
+            return response()->json($resultsset,500);
+        }
+
+        $resultsset = array();
+
+        foreach ($bouncers as $bouncer) {
+
+            $dsn=array();
+            //var_dump($bouncer->dsn);
+            // array(PDO::PGSQL_ATTR_DISABLE_NATIVE_PREPARED_STATEMENT => true)
+            $dsn = parse_url($bouncer->dsn);
+            // Clear some sensitive stuff up
+            //unset($bouncer['dsns']['pass']);
+            //unset($bouncer['dsn']);
+            $dn = $dsn;
+            $dn['pass']='<blanked>';
+
+            //echo var_dump($dsn);exit;
+            if (!empty($dsn)) {
+                //var_dump($dsn);
+                $bouncer['dsns']=$dn;
+                /*
+                 *   ["scheme"]=>
+                 *   string(10) "postgresql"
+                 *   ["host"]=>
+                 *   string(9) "127.0.0.1"
+                 *   ["port"]=>
+                 *   int(5432)
+                 *   ["user"]=>
+                 *   string(12) "bouncer-date"
+                 *   ["pass"]=>
+                 *   string(14) "bouncer-secret"
+                 *   ["path"]=>
+                 *   string(10) "/pgbouncer"
+                 *
+                 'driver' => 'pgsql',
+                 'host' => env('DB_HOST', 'localhost'),
+                 'port' => env('DB_PORT', '5432'),
+                 'database' => 'pgbouncer',
+                 'username' => env('DB_USERNAME', 'forge'),
+                 'password' => env('DB_PASSWORD', ''),
+                 'charset' => 'utf8',
+                 'prefix' => '',
+                 'schema' => 'public',
+
+                 'host' => env('DB_HOST', 'localhost'),
+                 'port' => env('DB_PORT', '5432'),
+                 'database' => 'pgbouncer',
+                 'username' => env('DB_USERNAME', 'forge'),
+                 'password' => env('DB_PASSWORD', ''),
+                 'charset' => 'utf8',
+                 */
+                //return response()->json($dsn,200);
+
+                DB::purge('pgbouncer');
+
+                Config::set('database.connections.pgbouncer.driver', 'pgsql');
+                Config::set('database.connections.pgbouncer.charset', 'utf8');
+                Config::set('database.connections.pgbouncer.host', $dsn['host'] );
+                Config::set('database.connections.pgbouncer.port', $dsn['port'] );
+                Config::set('database.connections.pgbouncer.username', $dsn['user'] );
+                Config::set('database.connections.pgbouncer.password', $dsn['pass'] );
+                Config::set('database.connections.pgbouncer.database', ltrim($dsn['path'],'/'));
+                // DB::setAttribute('PDO::ATTR_EMULATE_PREPARES', false);
+                // DB::setAttribute('PDO::PGSQL_ATTR_DISABLE_NATIVE_PREPARED_STATEMENT' , true);
+                // DB::connection('pgbouncer')  setDefaultOptions
+                Config::set('database.connections.pgbouncer.simple', 'true' );
+                Config::set('database.connections.pgbouncer.options', [ \PDO::ATTR_EMULATE_PREPARES => true ] );
+                //Config::set('database.connections.pgbouncer.database', 'bouncerhud');
+                //Config::set('database.connections.pgbouncer.schema', ltrim($dsn['path'],'/'));
+                //var_dump(Config::get('database.connections.pgbouncer'));
+                try {
+                    $sql = sprintf("SHOW POOLS");
+                    $results = DB::connection('pgbouncer')->select(DB::raw($sql));
+
+                    // $grb = DB::select(DB::raw($sql));
+                    // dd( DB::getQueryLog());
+                    // $rec_count = count ( $grb );
+                    //
+                    //foreach ($results as $k => $row) {
+                    //var_dump($row->name);
+                        /*
+                        /["name"]=> string(9) "pgbouncer"
+                            ["host"]=> NULL
+                            ["port"]=> int(5432)
+                            ["database"]=> string(9) "pgbouncer"
+                            ["force_user"]=> string(9) "pgbouncer"
+                            ["pool_size"]=> int(2)
+                            ["reserve_pool"]=> int(0)
+                            ["pool_mode"]=> string(9) "statement"
+                            ["max_connections"]=> int(0)
+                            ["current_connections"]=> int(0)
+                         */
+                    //}
+                    $resultsset[$bouncer->label] = array('results' => $results, 'info' => $bouncer);
+                    //return response()->json($results,200);
+                } catch(\Illuminate\Database\QueryException $ex){
+                    //if ((int)$ex->getCode() === 23505)
+                    //return $this->response->error('Problem with command on backend', 500);
+                    // var_dump($ex->getMessage());
+                    $resultsset[$bouncer->label] = array('error' => '402', 'warning message' => sprintf('problem with pgbouncer query: %s', $ex->getMessage() ));
+                }
+            } else {
+                $resultsset[$bouncer->label] = array('error' => '401', 'warning message' => sprintf('problem with DB dsn: %s',$bouncer->label));
+                // Log::info('Error: user', array($ex->getMessage()));
+            }
+            //var_dump($resultsset);
+        };
+        return response()->json($resultsset,200);
+    }
+
+    public function clients(Request $request, $buid=null)
     {
         $currentUser = JWTAuth::parseToken()->authenticate();
 
@@ -339,19 +474,7 @@ class PoolController extends Controller
 
         return response()->json(compact('bouncers', 'category'),200);
     }
-    public function clients(Request $request, $buid)
-    {
-        $currentUser = JWTAuth::parseToken()->authenticate();
-
-        $response = new Response();
-        $response->header('charset', 'utf-8');
-
-        $categories = Category::all();
-        $bouncers = Bouncer::all();
-
-        return response()->json(compact('bouncers', 'category'),200);
-    }
-    public function config(Request $request, $buid)
+    public function config(Request $request, $buid=null)
     {
         $currentUser = JWTAuth::parseToken()->authenticate();
 
