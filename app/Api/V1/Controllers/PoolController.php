@@ -125,53 +125,18 @@ class PoolController extends Controller
 
             $dsn=array();
             //var_dump($bouncer->dsn);
-            // array(PDO::PGSQL_ATTR_DISABLE_NATIVE_PREPARED_STATEMENT => true)
             $dsn = parse_url($bouncer->dsn);
-            // Clear some sensitive stuff up
-            //unset($bouncer['dsns']['pass']);
-            //unset($bouncer['dsn']);
             $dn = $dsn;
+            // Clear some sensitive stuff up
             $dn['pass']='<blanked>';
 
-            //echo var_dump($dsn);exit;
             if (!empty($dsn)) {
-                //var_dump($dsn);
                 $bouncer['dsns']=$dn;
-                /*
-                 *   ["scheme"]=>
-                 *   string(10) "postgresql"
-                 *   ["host"]=>
-                 *   string(9) "127.0.0.1"
-                 *   ["port"]=>
-                 *   int(5432)
-                 *   ["user"]=>
-                 *   string(12) "bouncer-date"
-                 *   ["pass"]=>
-                 *   string(14) "bouncer-secret"
-                 *   ["path"]=>
-                 *   string(10) "/pgbouncer"
-                 *
-                 'driver' => 'pgsql',
-                 'host' => env('DB_HOST', 'localhost'),
-                 'port' => env('DB_PORT', '5432'),
-                 'database' => 'pgbouncer',
-                 'username' => env('DB_USERNAME', 'forge'),
-                 'password' => env('DB_PASSWORD', ''),
-                 'charset' => 'utf8',
-                 'prefix' => '',
-                 'schema' => 'public',
 
-                 'host' => env('DB_HOST', 'localhost'),
-                 'port' => env('DB_PORT', '5432'),
-                 'database' => 'pgbouncer',
-                 'username' => env('DB_USERNAME', 'forge'),
-                 'password' => env('DB_PASSWORD', ''),
-                 'charset' => 'utf8',
-                 */
-                //return response()->json($dsn,200);
-
+                // Clean up the existing connection data
                 DB::purge('pgbouncer');
 
+                // Set with the contents of the bouncers table
                 Config::set('database.connections.pgbouncer.driver', 'pgsql');
                 Config::set('database.connections.pgbouncer.charset', 'utf8');
                 Config::set('database.connections.pgbouncer.host', $dsn['host'] );
@@ -180,60 +145,37 @@ class PoolController extends Controller
                 Config::set('database.connections.pgbouncer.password', $dsn['pass'] );
                 Config::set('database.connections.pgbouncer.database', ltrim($dsn['path'],'/'));
 
-                // DB::setAttribute('PDO::ATTR_EMULATE_PREPARES', false);
+                // Since PGbouncer does not talk prepared, we need to emulate this and even patch the DB driver code a bit to set these PDO flags:
+                // DB::setAttribute('PDO::ATTR_EMULATE_PREPARES', true);
                 // DB::setAttribute('PDO::PGSQL_ATTR_DISABLE_NATIVE_PREPARED_STATEMENT' , true);
-                // DB::connection('pgbouncer')  setDefaultOptions
                 Config::set('database.connections.pgbouncer.simple', 'true' );
                 Config::set('database.connections.pgbouncer.options', [ \PDO::ATTR_EMULATE_PREPARES => true , \PDO::ATTR_TIMEOUT => 1 ] );
-                //Config::set('database.connections.pgbouncer.database', 'bouncerhud');
-                //Config::set('database.connections.pgbouncer.schema', ltrim($dsn['path'],'/'));
-                //var_dump(Config::get('database.connections.pgbouncer'));
                 try {
                     $sql = sprintf("SHOW ".$command);
                     $results = DB::connection('pgbouncer')->select(DB::raw($sql));
-
-                    // $grb = DB::select(DB::raw($sql));
-                    // dd( DB::getQueryLog());
-                    // $rec_count = count ( $grb );
-                    //
-                    //foreach ($results as $k => $row) {
-                    //var_dump($row->name);
-                        /*
-                        /["name"]=> string(9) "pgbouncer"
-                            ["host"]=> NULL
-                            ["port"]=> int(5432)
-                            ["database"]=> string(9) "pgbouncer"
-                            ["force_user"]=> string(9) "pgbouncer"
-                            ["pool_size"]=> int(2)
-                            ["reserve_pool"]=> int(0)
-                            ["pool_mode"]=> string(9) "statement"
-                            ["max_connections"]=> int(0)
-                            ["current_connections"]=> int(0)
-                         */
-                    //}
                     $resultsset[$bouncer->label] = array('results' => $results, 'info' => $bouncer);
-                    //return response()->json($results,200);
+                    // return response()->json($results,200);
                 } catch(\Illuminate\Database\QueryException $e){
                     // var_dump($e->getMessage());
                 } catch(\PDOException $e) {
-                    //return $this->response->error('Problem with command on backend', 500);
-                    //echo $e->getMessage();
+                    // return $this->response->error('Problem with command on backend', 500);
+                    // echo $e->getMessage();
                     // echo $e->getCode();
-                    if ((int)$e->getCode() === 7) { // This is a timeout on network level.  if 1 bouncer fails we still want to see the results of all
+                    if ((int)$e->getCode() === 7) { // This is a timeout on network level.  if 1 bouncer fails we still want to see the results of the rest and not end up as an exception
                         $resultsset[$bouncer->label] = array('error' => '402', 'message' => sprintf('problem with pgbouncer : %s', $e->getMessage()), 'info' => $bouncer );
                     } else {
                         return response()->json(array('error' => '502', 'message' => sprintf('problem with pgbouncer : %s', $e->getMessage())), 500);
                     }
                 } catch(Exception $e) {
                     // Log::info('Error: user', array($e->getMessage()));
-                    //echo $e->getMessage();
+                    // echo $e->getMessage();
                     return response()->json(array('error' => '401', 'message' => sprintf('problem : %s', $e->getMessage())), 500);
                 }
             } else {
                 $resultsset[$bouncer->label] = array('error' => '501', 'message' => sprintf('problem with DB dsn: %s',$bouncer->label));
             }
             //var_dump($resultsset);
-        };
+        }
         return response()->json($resultsset,200);
     }
 }
