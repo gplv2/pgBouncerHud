@@ -226,7 +226,9 @@ fieldset {
                             <a id="stats" class="item " href="#/stats">Stats</a>
                             <a id="pools" class="item " href="#/pools">Pools</a>
                             <a id="clients" class="item " href="#/clients">Clients</a>
-                            <a id="configuration" class="item " href="#/conf">Configuration</a>
+                            <a id="servers" class="item " href="#/servers">Servers</a>
+                            <a id="conf" class="item " href="#/conf">Configuration</a>
+                            <a id="current" class="item " href="#/current">Current</a>
                         </div>
                         <div id="mainview" class="ui pointing menu">
                             <div class="header item">bouncer &gt; role</div>

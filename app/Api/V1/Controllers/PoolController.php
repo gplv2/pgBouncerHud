@@ -89,11 +89,14 @@ class PoolController extends Controller
         case 'pools':
             $command='POOLS';
             break;
-        case 'conf':
+        case 'config':
             $command='CONFIG';
             break;
         case 'clients':
             $command='CLIENTS';
+            break;
+        case 'lists':
+            $command='LISTS';
             break;
         default:
             $command='VERSION';
