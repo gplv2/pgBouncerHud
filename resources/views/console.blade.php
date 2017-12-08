@@ -75,8 +75,8 @@
 }
 
 #map-wrap {
-    min-height: 600px;
-    overflow-y: none;
+    min-height: 500px;
+
 }
 
 #cblist > input {
@@ -220,30 +220,29 @@ fieldset {
 
                 <div class="panel-body" id="map-wrap">
                     <div class="pusher">
-                    <div class="ui main container">
-                        <div class="row-fluid" id="flash">
-                            <a id="databases" class="item " href="#/databases">Databases</a>
-                            <a id="stats" class="item " href="#/stats">Stats</a>
-                            <a id="pools" class="item " href="#/pools">Pools</a>
-                            <a id="clients" class="item " href="#/clients">Clients</a>
-                            <a id="servers" class="item " href="#/servers">Servers</a>
-                            <a id="conf" class="item " href="#/conf">Configuration</a>
-                            <a id="current" class="item " href="#/current">Current</a>
+                        <div class="ui main container">
+                            <div class="row-fluid" id="flash">
+                                <a id="databases" class="item " href="#/databases">Databases</a>
+                                <a id="stats" class="item " href="#/stats">Stats</a>
+                                <a id="pools" class="item " href="#/pools">Pools</a>
+                                <a id="clients" class="item " href="#/clients">Clients</a>
+                                <a id="servers" class="item " href="#/servers">Servers</a>
+                                <a id="conf" class="item " href="#/conf">Configuration</a>
+                                <a id="current" class="item " href="#/current">Current</a>
+                            </div>
+                            <div id="mainview" class="ui pointing menu">
+                                <div class="header item">bouncer &gt; role</div>
+                            </div>
                         </div>
-                        <div id="mainview" class="ui pointing menu">
-                            <div class="header item">bouncer &gt; role</div>
-                        </div>
+                    <div class="panel-footer">
+                        <div id="msg" class="break-word notice info"></div>
                     </div>
-                 <div class="panel-footer">
-                     <div id="msg" class="break-word notice info"></div>
                 </div>
             </div>
+        </div>
     </div>
-  </div>
+    </div>
 </div>
-
-        <!-- <div class="col-sm-offset-0 col-sm-2"> -->
-    </div>
 @endsection
 
 @section('page-bottom-script')

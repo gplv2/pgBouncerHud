@@ -206,7 +206,7 @@
 
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav navbar-right">
-                    <li data-ng-show="token"><a ng-href="#/restricted">Restricted area</a></li>
+                    <!--<li data-ng-show="token"><a ng-href="#/restricted">Restricted area</a></li>-->
                     <li data-ng-hide="token"><a ng-href="#/signin">Log in</a></li>
                     <li data-ng-hide="token"><a ng-href="#/signup">Sign up</a></li>
                     <li data-ng-show="token"><a ng-click="logout()">Logout</a></li>
