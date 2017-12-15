@@ -29,6 +29,7 @@ $api->version('v1', function ($api) {
         $api->get('status/servers', 'App\Api\V1\Controllers\PoolController@action');
         $api->get('status/config', 'App\Api\V1\Controllers\PoolController@action');
         $api->get('status/lists', 'App\Api\V1\Controllers\PoolController@action');
+        $api->get('status/version', 'App\Api\V1\Controllers\PoolController@action');
 
         $api->get('status/databases/{buid}', 'App\Api\V1\Controllers\PoolController@action');
         $api->get('status/stats/{buid}', 'App\Api\V1\Controllers\PoolController@action');
