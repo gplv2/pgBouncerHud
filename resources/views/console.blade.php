@@ -33,6 +33,11 @@
     height: 98%;
     position: block;
 }
+
+#flash {
+    padding-bottom: 1em;
+}
+
 .panel-body {
     padding: 0px;
 }

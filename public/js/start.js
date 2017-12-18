@@ -100,13 +100,15 @@ $( document ).ready(function() {
                     var bid= bouncers.info.id;
                     var blab= bouncers.info.label;
                     if(bouncers.error) {
-                        $('#mainview').append('<div id="bouncer_'+bid+'"><h3>'+blab+' ('+info.dsns.host+'): <i>Offline</i></h3></div>');
+                        $('#mainview').append('<div id="bouncer_'+bid+'"><h3>'+blab+' ('+info.dsns.host+'): <i id=status_'+bid+'>Offline</i></h3></div>');
+                        $('#status_'+bid).removeClass().addClass("alert alert-fail");
                         $('#bouncer_'+bid).append('<div id="divcblist_'+bid+'">');
                         $('#divcblist_'+bid).append('<div id="cblist_'+bid+'">');
                     } else {
                         var hash = md5(bouncers.info.id); // "2063c1608d6e0baf80249c42e2be5804"
 
-                        $('#mainview').append('<div id="bouncer_'+bid+'"><h3>'+blab+' ('+info.dsns.host+'): <i>Online</i></h3></div>');
+                        $('#mainview').append('<div id="bouncer_'+bid+'"><h3>'+blab+' ('+info.dsns.host+'): <i id=status_'+bid+'>Online</i></h3></div>');
+                        $('#status_'+bid).removeClass().addClass("alert alert-success");
                         $('#bouncer_'+bid).append('<div id="divcblist_'+bid+'">');
                         $('#divcblist_'+bid).append('<div id="cblist_'+bid+'">');
 
@@ -181,13 +183,15 @@ $( document ).ready(function() {
                     var bid= bouncers.info.id;
                     var blab= bouncers.info.label;
                     if(bouncers.error) {
-                        $('#mainview').append('<div id="bouncer_'+bid+'"><h3>'+blab+' ('+info.dsns.host+'): <i>Offline</i></h3></div>');
+                        $('#mainview').append('<div id="bouncer_'+bid+'"><h3>'+blab+' ('+info.dsns.host+'): <i id=status_'+bid+'>Offline</i></h3></div>');
+                        $('#status_'+bid).removeClass().addClass("alert alert-fail");
                         $('#bouncer_'+bid).append('<div id="divcblist_'+bid+'">');
                         $('#divcblist_'+bid).append('<div id="cblist_'+bid+'">');
                     } else {
                         var hash = md5(bouncers.info.id); // "2063c1608d6e0baf80249c42e2be5804"
 
-                        $('#mainview').append('<div id="bouncer_'+bid+'"><h3>'+blab+' ('+info.dsns.host+'): <i>Online</i></h3></div>');
+                        $('#mainview').append('<div id="bouncer_'+bid+'"><h3>'+blab+' ('+info.dsns.host+'): <i id=status_'+bid+'>Online</i></h3></div>');
+                        $('#status_'+bid).removeClass().addClass("alert alert-success");
                         $('#bouncer_'+bid).append('<div id="divcblist_'+bid+'">');
                         $('#divcblist_'+bid).append('<div id="cblist_'+bid+'">');
 
@@ -263,13 +267,15 @@ $( document ).ready(function() {
                     var bid= bouncers.info.id;
                     var blab= bouncers.info.label;
                     if(bouncers.error) {
-                        $('#mainview').append('<div id="bouncer_'+bid+'"><h3>'+blab+' ('+info.dsns.host+'): <i>Offline</i></h3></div>');
+                        $('#mainview').append('<div id="bouncer_'+bid+'"><h3>'+blab+' ('+info.dsns.host+'): <i id=status_'+bid+'>Offline</i></h3></div>');
+                        $('#status_'+bid).removeClass().addClass("alert alert-fail");
                         $('#bouncer_'+bid).append('<div id="divcblist_'+bid+'">');
                         $('#divcblist_'+bid).append('<div id="cblist_'+bid+'">');
                     } else {
                         var hash = md5(bouncers.info.id); // "2063c1608d6e0baf80249c42e2be5804"
 
-                        $('#mainview').append('<div id="bouncer_'+bid+'"><h3>'+blab+' ('+info.dsns.host+'): <i>Online</i></h3></div>');
+                        $('#mainview').append('<div id="bouncer_'+bid+'"><h3>'+blab+' ('+info.dsns.host+'): <i id=status_'+bid+'>Online</i></h3></div>');
+                        $('#status_'+bid).removeClass().addClass("alert alert-success");
                         $('#bouncer_'+bid).append('<div id="divcblist_'+bid+'">');
                         $('#divcblist_'+bid).append('<div id="cblist_'+bid+'">');
 
@@ -346,13 +352,15 @@ $( document ).ready(function() {
                     var bid= bouncers.info.id;
                     var blab= bouncers.info.label;
                     if(bouncers.error) {
-                        $('#mainview').append('<div id="bouncer_'+bid+'"><h3>'+blab+' ('+info.dsns.host+'): <i>Offline</i></h3></div>');
+                        $('#mainview').append('<div id="bouncer_'+bid+'"><h3>'+blab+' ('+info.dsns.host+'): <i id=status_'+bid+'>Offline</i></h3></div>');
+                        $('#status_'+bid).removeClass().addClass("alert alert-fail");
                         $('#bouncer_'+bid).append('<div id="divcblist_'+bid+'">');
                         $('#divcblist_'+bid).append('<div id="cblist_'+bid+'">');
                     } else {
                         var hash = md5(bouncers.info.id); // "2063c1608d6e0baf80249c42e2be5804"
 
-                        $('#mainview').append('<div id="bouncer_'+bid+'"><h3>'+blab+' ('+info.dsns.host+'): <i>Online</i></h3></div>');
+                        $('#mainview').append('<div id="bouncer_'+bid+'"><h3>'+blab+' ('+info.dsns.host+'): <i id=status_'+bid+'>Online</i></h3></div>');
+                        $('#status_'+bid).removeClass().addClass("alert alert-success");
                         $('#bouncer_'+bid).append('<div id="divcblist_'+bid+'">');
                         $('#divcblist_'+bid).append('<div id="cblist_'+bid+'">');
 
@@ -429,13 +437,15 @@ $( document ).ready(function() {
                     var bid= bouncers.info.id;
                     var blab= bouncers.info.label;
                     if(bouncers.error) {
-                        $('#mainview').append('<div id="bouncer_'+bid+'"><h3>'+blab+' ('+info.dsns.host+'): <i>Offline</i></h3></div>');
+                        $('#mainview').append('<div id="bouncer_'+bid+'"><h3>'+blab+' ('+info.dsns.host+'): <i id=status_'+bid+'>Offline</i></h3></div>');
+                        $('#status_'+bid).removeClass().addClass("alert alert-fail");
                         $('#bouncer_'+bid).append('<div id="divcblist_'+bid+'">');
                         $('#divcblist_'+bid).append('<div id="cblist_'+bid+'">');
                     } else {
                         var hash = md5(bouncers.info.id); // "2063c1608d6e0baf80249c42e2be5804"
 
-                        $('#mainview').append('<div id="bouncer_'+bid+'"><h3>'+blab+' ('+info.dsns.host+'): <i>Online</i></h3></div>');
+                        $('#mainview').append('<div id="bouncer_'+bid+'"><h3>'+blab+' ('+info.dsns.host+'): <i id=status_'+bid+'>Online</i></h3></div>');
+                        $('#status_'+bid).removeClass().addClass("alert alert-success");
                         $('#bouncer_'+bid).append('<div id="divcblist_'+bid+'">');
                         $('#divcblist_'+bid).append('<div id="cblist_'+bid+'">');
 
@@ -512,13 +522,15 @@ $( document ).ready(function() {
                     var bid= bouncers.info.id;
                     var blab= bouncers.info.label;
                     if(bouncers.error) {
-                        $('#mainview').append('<div id="bouncer_'+bid+'"><h3>'+blab+' ('+info.dsns.host+'): <i>Offline</i></h3></div>');
+                        $('#mainview').append('<div id="bouncer_'+bid+'"><h3>'+blab+' ('+info.dsns.host+'): <i id=status_'+bid+'>Offline</i></h3></div>');
+                        $('#status_'+bid).removeClass().addClass("alert alert-fail");
                         $('#bouncer_'+bid).append('<div id="divcblist_'+bid+'">');
                         $('#divcblist_'+bid).append('<div id="cblist_'+bid+'">');
                     } else {
                         var hash = md5(bouncers.info.id); // "2063c1608d6e0baf80249c42e2be5804"
 
-                        $('#mainview').append('<div id="bouncer_'+bid+'"><h3>'+blab+' ('+info.dsns.host+'): <i>Online</i></h3></div>');
+                        $('#mainview').append('<div id="bouncer_'+bid+'"><h3>'+blab+' ('+info.dsns.host+'): <i id=status_'+bid+'>Online</i></h3></div>');
+                        $('#status_'+bid).removeClass().addClass("alert alert-success");
                         $('#bouncer_'+bid).append('<div id="divcblist_'+bid+'">');
                         $('#divcblist_'+bid).append('<div id="cblist_'+bid+'">');
 
@@ -595,13 +607,15 @@ $( document ).ready(function() {
                     var bid= bouncers.info.id;
                     var blab= bouncers.info.label;
                     if(bouncers.error) {
-                        $('#mainview').append('<div id="bouncer_'+bid+'"><h3>'+blab+' ('+info.dsns.host+'): <i>Offline</i></h3></div>');
+                        $('#mainview').append('<div id="bouncer_'+bid+'"><h3>'+blab+' ('+info.dsns.host+'): <i id=status_'+bid+'>Offline</i></h3></div>');
+                        $('#status_'+bid).removeClass().addClass("alert alert-fail");
                         $('#bouncer_'+bid).append('<div id="divcblist_'+bid+'">');
                         $('#divcblist_'+bid).append('<div id="cblist_'+bid+'">');
                     } else {
                         var hash = md5(bouncers.info.id); // "2063c1608d6e0baf80249c42e2be5804"
 
-                        $('#mainview').append('<div id="bouncer_'+bid+'"><h3>'+blab+' ('+info.dsns.host+'): <i>Online</i></h3></div>');
+                        $('#mainview').append('<div id="bouncer_'+bid+'"><h3>'+blab+' ('+info.dsns.host+'): <i id=status_'+bid+'>Online</i></h3></div>');
+                        $('#status_'+bid).removeClass().addClass("alert alert-success");
                         $('#bouncer_'+bid).append('<div id="divcblist_'+bid+'">');
                         $('#divcblist_'+bid).append('<div id="cblist_'+bid+'">');
 
