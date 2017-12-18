@@ -101,7 +101,7 @@ $( document ).ready(function() {
                     var blab= bouncers.info.label;
                     if(bouncers.error) {
                         $('#mainview').append('<div id="bouncer_'+bid+'"><h3>'+blab+' ('+info.dsns.host+'): <i id=status_'+bid+'>Offline</i></h3></div>');
-                        $('#status_'+bid).removeClass().addClass("alert alert-fail");
+                        $('#status_'+bid).removeClass().addClass("alert alert-warning");
                         $('#bouncer_'+bid).append('<div id="divcblist_'+bid+'">');
                         $('#divcblist_'+bid).append('<div id="cblist_'+bid+'">');
                     } else {
@@ -112,7 +112,7 @@ $( document ).ready(function() {
                         $('#bouncer_'+bid).append('<div id="divcblist_'+bid+'">');
                         $('#divcblist_'+bid).append('<div id="cblist_'+bid+'">');
 
-                        $('#cblist_'+bid).append('<h4 class="ui header"><div class="content">Databases</div></h4>');
+                        $('#cblist_'+bid).append('<h4 class="ui header"><div class="content">Databases</div></h2>');
                         $('#cblist_'+bid).append('<div class="" id="widget_'+hash+'" data-name="'+hash+'">');
 
                         $('#widget_'+hash).append('<table id="tset_' + hash + '" class="table table-striped table-bordered">');
@@ -184,7 +184,7 @@ $( document ).ready(function() {
                     var blab= bouncers.info.label;
                     if(bouncers.error) {
                         $('#mainview').append('<div id="bouncer_'+bid+'"><h3>'+blab+' ('+info.dsns.host+'): <i id=status_'+bid+'>Offline</i></h3></div>');
-                        $('#status_'+bid).removeClass().addClass("alert alert-fail");
+                        $('#status_'+bid).removeClass().addClass("alert alert-warning");
                         $('#bouncer_'+bid).append('<div id="divcblist_'+bid+'">');
                         $('#divcblist_'+bid).append('<div id="cblist_'+bid+'">');
                     } else {
@@ -195,7 +195,7 @@ $( document ).ready(function() {
                         $('#bouncer_'+bid).append('<div id="divcblist_'+bid+'">');
                         $('#divcblist_'+bid).append('<div id="cblist_'+bid+'">');
 
-                        $('#cblist_'+bid).append('<h4 class="ui header"><div class="content">Databases</div></h4>');
+                        $('#cblist_'+bid).append('<h4 class="ui header"><div class="content">Stats</div></h4>');
                         $('#cblist_'+bid).append('<div class="" id="widget_'+hash+'" data-name="'+hash+'">');
 
                         $('#widget_'+hash).append('<table id="tset_' + hash + '" class="table table-striped table-bordered">');
@@ -268,7 +268,7 @@ $( document ).ready(function() {
                     var blab= bouncers.info.label;
                     if(bouncers.error) {
                         $('#mainview').append('<div id="bouncer_'+bid+'"><h3>'+blab+' ('+info.dsns.host+'): <i id=status_'+bid+'>Offline</i></h3></div>');
-                        $('#status_'+bid).removeClass().addClass("alert alert-fail");
+                        $('#status_'+bid).removeClass().addClass("alert alert-warning");
                         $('#bouncer_'+bid).append('<div id="divcblist_'+bid+'">');
                         $('#divcblist_'+bid).append('<div id="cblist_'+bid+'">');
                     } else {
@@ -279,7 +279,7 @@ $( document ).ready(function() {
                         $('#bouncer_'+bid).append('<div id="divcblist_'+bid+'">');
                         $('#divcblist_'+bid).append('<div id="cblist_'+bid+'">');
 
-                        $('#cblist_'+bid).append('<h4 class="ui header"><div class="content">Databases</div></h4>');
+                        $('#cblist_'+bid).append('<h4 class="ui header"><div class="content">Pools</div></h4>');
                         $('#cblist_'+bid).append('<div class="" id="widget_'+hash+'" data-name="'+hash+'">');
 
                         $('#widget_'+hash).append('<table id="tset_' + hash + '" class="table table-striped table-bordered">');
@@ -353,7 +353,7 @@ $( document ).ready(function() {
                     var blab= bouncers.info.label;
                     if(bouncers.error) {
                         $('#mainview').append('<div id="bouncer_'+bid+'"><h3>'+blab+' ('+info.dsns.host+'): <i id=status_'+bid+'>Offline</i></h3></div>');
-                        $('#status_'+bid).removeClass().addClass("alert alert-fail");
+                        $('#status_'+bid).removeClass().addClass("alert alert-warning");
                         $('#bouncer_'+bid).append('<div id="divcblist_'+bid+'">');
                         $('#divcblist_'+bid).append('<div id="cblist_'+bid+'">');
                     } else {
@@ -438,7 +438,7 @@ $( document ).ready(function() {
                     var blab= bouncers.info.label;
                     if(bouncers.error) {
                         $('#mainview').append('<div id="bouncer_'+bid+'"><h3>'+blab+' ('+info.dsns.host+'): <i id=status_'+bid+'>Offline</i></h3></div>');
-                        $('#status_'+bid).removeClass().addClass("alert alert-fail");
+                        $('#status_'+bid).removeClass().addClass("alert alert-warning");
                         $('#bouncer_'+bid).append('<div id="divcblist_'+bid+'">');
                         $('#divcblist_'+bid).append('<div id="cblist_'+bid+'">');
                     } else {
@@ -523,7 +523,7 @@ $( document ).ready(function() {
                     var blab= bouncers.info.label;
                     if(bouncers.error) {
                         $('#mainview').append('<div id="bouncer_'+bid+'"><h3>'+blab+' ('+info.dsns.host+'): <i id=status_'+bid+'>Offline</i></h3></div>');
-                        $('#status_'+bid).removeClass().addClass("alert alert-fail");
+                        $('#status_'+bid).removeClass().addClass("alert alert-warning");
                         $('#bouncer_'+bid).append('<div id="divcblist_'+bid+'">');
                         $('#divcblist_'+bid).append('<div id="cblist_'+bid+'">');
                     } else {
@@ -608,7 +608,7 @@ $( document ).ready(function() {
                     var blab= bouncers.info.label;
                     if(bouncers.error) {
                         $('#mainview').append('<div id="bouncer_'+bid+'"><h3>'+blab+' ('+info.dsns.host+'): <i id=status_'+bid+'>Offline</i></h3></div>');
-                        $('#status_'+bid).removeClass().addClass("alert alert-fail");
+                        $('#status_'+bid).removeClass().addClass("alert alert-warning");
                         $('#bouncer_'+bid).append('<div id="divcblist_'+bid+'">');
                         $('#divcblist_'+bid).append('<div id="cblist_'+bid+'">');
                     } else {
