@@ -220,9 +220,9 @@ fieldset {
                   Console
                 </div>
 
-                <div class="panel-body" id="map-wrap">
-                    <div class="pusher">
-                        <div class="ui main container">
+                <!-- <div class="panel-body" id="map-wrap"> -->
+                    <div class="panel-body pusher">
+                        <div class="ui main container-fluid">
                             <div class="row-fluid" id="flash">
                                 <a id="databases" class="item " href="#/databases">Databases</a>
                                 <a id="stats" class="item " href="#/stats">Stats</a>
@@ -240,7 +240,7 @@ fieldset {
                         <div id="msg" class="break-word notice info"></div>
                     </div>
                 </div>
-            </div>
+            <!-- </div> -->
         </div>
     </div>
     </div>
