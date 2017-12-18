@@ -102,7 +102,7 @@
                     $http.get(urls.BASE + '/restricted').success(success).error(error)
                 },
                 getApiData: function (success, error) {
-                    $http.get(urls.BASE_API + '/movie_wizard/recommendations').success(success).error(error)
+                    $http.get(urls.BASE_API + '/bouncers').success(success).error(error)
                 }
             };
         }

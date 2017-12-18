@@ -1,5 +1,5 @@
             <div class="panel-heading" data-toggle="collapse" data-target="#bdemo">
-                pgBouncer Hud console!
+                pgBouncer Hud
             </div>
             <div class="panel-body">
                 <div class="row-fluid">
@@ -14,7 +14,7 @@
 
             <div data-ng-show="token" class="panel-body collapse" id="bdemo">
                 <div class="row-fluid">
-                    <p>You are now logged in and have received JWT from the backend.</p>
+                    <p>You are now logged in and have received JWT token.</p>
                     <p>Here is the claims data:</p>
                     <table class="table table-bordered table-striped">
                         <tr data-ng-repeat="(key, value) in tokenClaims">
@@ -25,7 +25,7 @@
                 </div>
                 <div class="row-fluid">
                     <div data-ng-show="token" class="col-md-offset-2 col-md-4">
-<!--                        <a href="#/restricted" class="btn btn-default btn-primary" role="button">Restricted area</a> -->
+                        <a href="#/restricted" class="btn btn-default btn-primary" role="button">Restricted area</a> 
                     </div>
                 </div>
             </div>

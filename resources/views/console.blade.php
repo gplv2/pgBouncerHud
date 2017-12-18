@@ -217,7 +217,7 @@ fieldset {
       <!--Body content-->
             <div class="panel panel-default">
                 <div class="panel-heading">
-                  Bouncer overview
+                  Console
                 </div>
 
                 <div class="panel-body" id="map-wrap">
