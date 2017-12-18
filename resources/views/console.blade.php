@@ -46,6 +46,11 @@
     padding-bottom: 1em;
 }
 
+.myhead {
+    /*display:inline-block; */
+    display: flex;
+}
+
 .panel-body {
     padding: 0px;
 }
@@ -255,20 +260,6 @@ fieldset {
             <!-- </div> -->
         </div>
     </div>
-    <div class="col-sm-3 col-md-3 sidebar sidebar-left pull-left">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                Breadcrumbs
-            </div>
-            <div class="panel-body">
-            <ol id="breadcrumb1" class="breadcrumb">
-                <li class="breadcrumb-item"><a href="console#/">Home</a></li>
-                <li class="breadcrumb-item"><a href="#">Servername</a></li>
-                <li class="breadcrumb-item active">Databases</li>
-            </ol>
-            </div>
-            </div>
-        </div>
     </div>
     </div>
 </div>

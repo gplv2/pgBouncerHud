@@ -61,11 +61,11 @@ $( document ).ready(function() {
             var bid= bouncers.info.id;
             var blab= bouncers.info.label;
 
-            $('#mainview').append('<div class="list-group-item d-flex justify-content-between align-items-center" id="bouncer_'+bid+'"><div>'+blab+' ('+info.dsns.host+')</div></div>');
-            $('#bouncer_'+bid).append('<div id="divcblist_'+bid+'">');
-            $('#divcblist_'+bid).append('<div id="cblist_'+bid+'">');
-            $('#cblist_'+bid).html('<i id=status_'+bid+'>Offline</i>');
-            $('#status_'+bid).removeClass().addClass("alert alert-warning");
+            //$('#mainview').append('<div class="ui header">'+blab+' ('+info.dsns.host+')</div>'+'<div class="list-group-item" id="bouncer_'+bid+'"></div>');
+            $('#mainview').append('<div class="row-fluid list-group-item" id="bouncer_'+bid+'"/>');
+            $('#bouncer_'+bid).append('<div id ="head_'+bid+'" class="myhead"><ol id="breadcrumb_'+bid+'" class="breadcrumb"> <li class="breadcrumb-item active">'+blab + '('+info.dsns.host+')</li> <li class="breadcrumb-item active">'+section_id+'</li></ol>');
+            //
+            $('#head_'+bid).append('<div class="alert alert-warning pull-right" id="status_'+bid+'">Offline</div>');
         }
 
         function bouncerInSuccess(bouncers,section_id) {
@@ -99,14 +99,15 @@ $( document ).ready(function() {
             var blab= bouncers.info.label;
             var hash = md5(bouncers.info.id); // "2063c1608d6e0baf80249c42e2be5804"
 
-            $('#mainview').append('<div class="list-group-item d-flex justify-content-between align-items-center" id="bouncer_'+bid+'"><div>'+blab+' ('+info.dsns.host+')</div></div>');
+            $('#mainview').append('<div class="row-fluid list-group-item" id="bouncer_'+bid+'"/>');
+
+            $('#bouncer_'+bid).append('<div id ="head_'+bid+'" class="myhead"><ol id="breadcrumb_'+bid+'" class="breadcrumb"> <li class="breadcrumb-item"><a href="console#/'+section_id+'">'+blab + '('+info.dsns.host+')</a></li> <li class="breadcrumb-item active">'+section_id+'</li></ol>');
+
+            $('#head_'+bid).append('<div class="alert alert-success pull-right" id="status_'+bid+'">Online</div>');
 
             $('#bouncer_'+bid).append('<div id="divcblist_'+bid+'">');
             $('#divcblist_'+bid).append('<div id="cblist_'+bid+'">');
-            $('#cblist_'+bid).html('<i id=status_'+bid+'>Online</i>');
-            $('#status_'+bid).removeClass().addClass("alert alert-success pull-right");
 
-            $('#cblist_'+bid).append('<h2 class="ui header"><div class="content"><p>'+section_id+'</p></div></h2>');
             $('#cblist_'+bid).append('<div class="" id="widget_'+hash+'" data-name="'+hash+'">');
 
             $('#widget_'+hash).append('<table id="tset_' + hash + '" class="table table-striped table-bordered">');
@@ -173,7 +174,8 @@ $( document ).ready(function() {
                 console.log( data );
             }
 
-            $('#mainview').empty().addClass("list-group");
+            //$('#mainview').empty().addClass("list-group");
+            $('#mainview').empty();
 
             $.each(data, function(i, bouncers) {
                 if(bouncers.error) {
