@@ -19,10 +19,10 @@
                     $("#map-wrap").append(res.token + '<br>');
                     $('#map-wrap').css("width", canvaswidth);
                     // window.location = "/console#/";
-                    setTimeout(function(){ 
+                    setTimeout(function(){
                         location.assign("/console#/");
                         location.reload(true);
-                    }, 100);  
+                    }, 100);
                 }
 
                 $scope.signin = function () {
@@ -51,14 +51,15 @@
 
                 $scope.logout = function () {
                     Auth.logout(function () {
-                        setTimeout(function(){ 
+                        setTimeout(function(){
                             window.location = "/console#/"
                             location.reload(true);
-                        }, 100);  
+                        }, 100);
                     });
                 };
                 $scope.token = $localStorage.token;
                 $scope.tokenClaims = Auth.getTokenClaims();
+                $scope.showClaims = Auth.getShowClaims();
             }])
 
         .controller('RestrictedController', ['$rootScope', '$scope', 'Data', function ($rootScope, $scope, Data) {

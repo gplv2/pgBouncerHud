@@ -44,6 +44,7 @@
             function jsonToURI(json){ return encodeURIComponent(JSON.stringify(json)); }
 
             var tokenClaims = getClaimsFromToken();
+            var showClaims = getClaimsFromToken();
 
             return {
                 signup: function (data, success, error) {
@@ -89,6 +90,17 @@
                 },
                 getTokenClaims: function () {
                     return tokenClaims;
+                },
+                getShowClaims: function () {
+                    var iat_date = new Date(1000*tokenClaims.iat);
+                    var exp_date = new Date(1000*tokenClaims.exp);
+                    var nbf_date = new Date(1000*tokenClaims.nbf);
+
+                    showClaims.iat=iat_date.toLocaleString();
+                    showClaims.exp=exp_date.toLocaleString();
+                    showClaims.nbf=nbf_date.toLocaleString();
+
+                    return showClaims;
                 }
             };
         }
