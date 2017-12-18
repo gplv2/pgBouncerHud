@@ -209,9 +209,11 @@ fieldset {
 <div class="container-fluid">
   <div class="row-fluid">
     <!--Sidebar content-->
-    <div class="col-sm-12 col-md-12 sidebar sidebar-left pull-left">
+    <div class="col-sm-3 col-md-3 sidebar sidebar-left pull-left">
       <!--Injected angular content-->
             <div class="panel panel-default" ng-view=""></div>
+    </div>
+    <div class="col-sm-9 col-md-9 sidebar sidebar-left pull-right">
       <!--Body content-->
             <div class="panel panel-default">
                 <div class="panel-heading">
@@ -250,7 +252,7 @@ fieldset {
 <script src="/js/app.js"></script>
 <script src="/js/controllers.js"></script>
 <script src="/js/services.js"></script>
-<script src="/js/jquery.fileinput.js"></script>
+<!-- <script src="/js/jquery.fileinput.js"></script> -->
 <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
 <script src="/js/start.js"></script>

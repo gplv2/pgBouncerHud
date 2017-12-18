@@ -91,10 +91,26 @@
             .navbar {
                min-height: 55px;
             }
+            .navbar>.container-fluid {
+               display: inline-block;
+            }
             .navbar-header {
                float: left;
                font-family: 'Oswald';
             }
+            .navbar-default .navbar-nav>li>a {
+                color: #158CBA;
+            }
+
+            .navbar-default .navbar-nav>li>a:focus, .navbar-default .navbar-nav>li>a:hover {
+                color: white;
+                cursor: pointer;
+            }
+
+            .btn-toolbar  {
+                display: inline;
+            }
+
             .panel-heading {
                font-family: 'Oswald';
                font-size: 26px;
@@ -187,13 +203,13 @@
 </head>
 
 <!-- <a class="navbar-brand{{ (Request::is('console') ? ' active' : '')}}" href="{{ url('/console') }}"> Console </a> -->
-        <!-- {!! Html::image('img/froomle.png', 'froomle logo',  array('class' => 'navbar-left img-responsive pull-left')) !!} -->
 
 @yield('bodydef')
     <!-- <nav class="navbar navbar-default"> -->
     <div class="navbar navbar-default" role="navigation" data-ng-controller="HomeController">
         <div class="container-fluid">
         <div class="navbar-header">
+            {!! Html::image('img/pgbouncerhud.png', 'pgbouncerhud logo',  array('class' => 'navbar-left img-responsive pull-left')) !!}
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
                 <span class="sr-only">Toggle navigation</span>
                 <span class="icon-bar"></span>
@@ -203,10 +219,11 @@
         <a class="navbar-brand{{ (Request::is('console') ? ' active' : '')}}" href="{{ url('/console') }}#/"> Console </a>
         <a class="navbar-brand{{ (Request::is('about') ? ' active' : '')}}" href="{{ url('/about') }}#/"> About </a>
         </div>
-
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav navbar-right">
-                    <!--<li data-ng-show="token"><a ng-href="#/restricted">Restricted area</a></li>-->
+<!-- 
+                    <li data-ng-show="token"><a ng-href="#/restricted">Restricted area</a></li>
+-->
                     <li data-ng-hide="token"><a ng-href="#/signin">Log in</a></li>
                     <li data-ng-hide="token"><a ng-href="#/signup">Sign up</a></li>
                     <li data-ng-show="token"><a ng-click="logout()">Logout</a></li>
@@ -238,7 +255,7 @@
 			<div class="footer-center">
 				<div>
 					<i class="fa fa-envelope"></i>
-					<p><a href="mailto:info@froomle.com">info@bitless.be</a></p>
+					<p><a href="mailto:info@bitless.be">info@bitless.be</a></p>
 				</div>
 			</div>
 
