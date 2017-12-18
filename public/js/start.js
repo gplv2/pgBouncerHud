@@ -48,596 +48,143 @@ $( document ).ready(function() {
     };
 
 
-    $( "#databases" ).click(function( event ) {
-            event.preventDefault();
+    $( "#databases, #stats, #pools, #clients, #servers, #config, #current" ).click(function( event ) {
+        event.preventDefault();
+        $('#msg').removeClass().empty();
+        var section_id=this.id;
 
-            $(this).toggleClass('active');
-            $('body').css('cursor', 'wait');
+        $(this).toggleClass('active');
+        $('body').css('cursor', 'wait');
 
-            // var mt = $("#soemid").val();
+        function bouncerInError(bouncers) {
+            var info= bouncers.info;
+            var bid= bouncers.info.id;
+            var blab= bouncers.info.label;
 
-            var token = myLocalStorage.get('ngStorage-token');
+            $('#mainview').append('<div class="list-group-item d-flex justify-content-between align-items-center" id="bouncer_'+bid+'"><div>'+blab+' ('+info.dsns.host+')</div></div>');
+            $('#bouncer_'+bid).append('<div id="divcblist_'+bid+'">');
+            $('#divcblist_'+bid).append('<div id="cblist_'+bid+'">');
+            $('#cblist_'+bid).html('<i id=status_'+bid+'>Offline</i>');
+            $('#status_'+bid).removeClass().addClass("alert alert-warning");
+        }
 
-            //var id = $('#userid').val();
+        function bouncerInSuccess(bouncers,section_id) {
 
-            //var url= "/api/status/"+ id +"/databases";
-            var url= "/api/status/databases";
-            // $('#msg').html('Calling API : <pre class="json">' + library.json.syntaxHighlight(JSON.stringify(token, null, 4)) + '</pre>');
-
-            // Filing out the json freeform text field
-            // $('#apidata').html(JSON.stringify(fdata));
-
-            // Assign handlers immediately after making the request
-            $.ajax({
-                method: "GET",
-                url: url,
-                // data: JSON.stringify(fdata),
-                cache: false,
-                beforeSend: function(xhr, settings) {
-                    if (token) {
-                        xhr.setRequestHeader('Authorization','Bearer ' + token);
-                    }
-                    xhr.setRequestHeader('Content-Type', 'application/json');
-                    xhr.overrideMimeType( 'application/json' );
-                    start_time = new Date().getTime();
-                }
-            })
-            .done(function( data ) {
-                $('body').css('cursor', 'default');
-                var request_time = new Date().getTime() - start_time;
-                if ( console && console.log ) {
-                    //console.log( data );
-                }
-
-                $('#mainview').empty();
-
-                function addOption( hash, res, bouncer ) {
+            function addOption( hash, res, bouncer ,section_id) {
+                if(section_id == 'databases') {
                     $('#tbd_' + hash).append('<tr> <td>'+bouncer.label+'</td> <td>'+res.host+'</td> <td>'+res.port+'</td> <td>'+res.database+'</td> <td>'+res.force_user+'</td> <td>'+res.pool_size+'</td> <td>'+res.reserve_pool+'</td> <td>'+res.pool_mode+'</td> <td>'+res.max_connections+'</td> <td>'+res.current_connections+'</td> </tr>');
                 }
-
-                $.each(data, function(i, bouncers) {
-                    var info= bouncers.info;
-                    var bid= bouncers.info.id;
-                    var blab= bouncers.info.label;
-                    if(bouncers.error) {
-                        $('#mainview').append('<div id="bouncer_'+bid+'"><h3>'+blab+' ('+info.dsns.host+'): <i id=status_'+bid+'>Offline</i></h3></div>');
-                        $('#status_'+bid).removeClass().addClass("alert alert-warning");
-                        $('#bouncer_'+bid).append('<div id="divcblist_'+bid+'">');
-                        $('#divcblist_'+bid).append('<div id="cblist_'+bid+'">');
-                    } else {
-                        var hash = md5(bouncers.info.id); // "2063c1608d6e0baf80249c42e2be5804"
-
-                        $('#mainview').append('<div id="bouncer_'+bid+'"><h3>'+blab+' ('+info.dsns.host+'): <i id=status_'+bid+'>Online</i></h3></div>');
-                        $('#status_'+bid).removeClass().addClass("alert alert-success");
-                        $('#bouncer_'+bid).append('<div id="divcblist_'+bid+'">');
-                        $('#divcblist_'+bid).append('<div id="cblist_'+bid+'">');
-
-                        $('#cblist_'+bid).append('<h4 class="ui header"><div class="content">Databases</div></h2>');
-                        $('#cblist_'+bid).append('<div class="" id="widget_'+hash+'" data-name="'+hash+'">');
-
-                        $('#widget_'+hash).append('<table id="tset_' + hash + '" class="table table-striped table-bordered">');
-                        $('#tset_'+hash).append('<thead id="tha_' + hash + '"/>');
-                        $('#tset_'+hash).append('<tbody id="tbd_' + hash + '"/>');
-                        $('#tha_'+hash).append('<tr> <th>Name</th> <th>Host</th> <th>Port</th> <th>Database</th> <th>Force User</th> <th>Pool Size</th> <th>Reserve Pool</th> <th>Pool Mode</th> <th>Max Connections</th> <th>Current Connections</th></tr>');
-
-                        $.each(bouncers.results, function(i, database) {
-                            addOption( hash, database, info );
-                        });
-
-                        $('#tset_'+hash).DataTable();
-                    }
-                });
-            });
-      });
-
-    $( "#stats" ).click(function( event ) {
-            event.preventDefault();
-
-            $(this).toggleClass('active');
-            $('body').css('cursor', 'wait');
-
-            // var mt = $("#soemid").val();
-
-            var token = myLocalStorage.get('ngStorage-token');
-
-            //var id = $('#userid').val();
-
-            //var url= "/api/status/"+ id +"/databases";
-            var url= "/api/status/stats";
-            // $('#msg').html('Calling API : <pre class="json">' + library.json.syntaxHighlight(JSON.stringify(token, null, 4)) + '</pre>');
-
-            // Filing out the json freeform text field
-            // $('#apidata').html(JSON.stringify(fdata));
-
-            // Assign handlers immediately after making the request
-            $.ajax({
-                method: "GET",
-                url: url,
-                // data: JSON.stringify(fdata),
-                cache: false,
-                beforeSend: function(xhr, settings) {
-                    if (token) {
-                        xhr.setRequestHeader('Authorization','Bearer ' + token);
-                    }
-                    xhr.setRequestHeader('Content-Type', 'application/json');
-                    xhr.overrideMimeType( 'application/json' );
-                    start_time = new Date().getTime();
-                }
-            })
-            .done(function( data ) {
-                $('body').css('cursor', 'default');
-                var request_time = new Date().getTime() - start_time;
-                if ( console && console.log ) {
-                    //console.log( data );
-                }
-
-                $('#mainview').empty();
-
-                function addOption( hash, res, bouncer ) {
+                if(section_id == 'stats') {
                     $('#tbd_' + hash).append('<tr> <td>'+res.database+'</td> <td>'+res.total_requests+'</td> <td>'+res.total_received+'</td> <td>'+res.total_sent+'</td> <td>'+res.total_query_time+'</td> <td>'+res.avg_req+'</td> <td>'+res.avg_recv+'</td> <td>'+res.avg_sent+'</td> <td>'+res.avg_query+'</td></tr>');
-                    //$('#tbd_' + hash).append('<tr> <td>'+bouncer.label+'</td> <td>'+res.host+'</td> <td>'+res.port+'</td> <td>'+res.database+'</td> <td>'+res.force_user+'</td> <td>'+res.pool_size+'</td> <td>'+res.reserve_pool+'</td> <td>'+res.pool_mode+'</td> <td>'+res.max_connections+'</td> <td>'+res.current_connections+'</td> </tr>');
                 }
-
-                $.each(data, function(i, bouncers) {
-                    var info= bouncers.info;
-                    var bid= bouncers.info.id;
-                    var blab= bouncers.info.label;
-                    if(bouncers.error) {
-                        $('#mainview').append('<div id="bouncer_'+bid+'"><h3>'+blab+' ('+info.dsns.host+'): <i id=status_'+bid+'>Offline</i></h3></div>');
-                        $('#status_'+bid).removeClass().addClass("alert alert-warning");
-                        $('#bouncer_'+bid).append('<div id="divcblist_'+bid+'">');
-                        $('#divcblist_'+bid).append('<div id="cblist_'+bid+'">');
-                    } else {
-                        var hash = md5(bouncers.info.id); // "2063c1608d6e0baf80249c42e2be5804"
-
-                        $('#mainview').append('<div id="bouncer_'+bid+'"><h3>'+blab+' ('+info.dsns.host+'): <i id=status_'+bid+'>Online</i></h3></div>');
-                        $('#status_'+bid).removeClass().addClass("alert alert-success");
-                        $('#bouncer_'+bid).append('<div id="divcblist_'+bid+'">');
-                        $('#divcblist_'+bid).append('<div id="cblist_'+bid+'">');
-
-                        $('#cblist_'+bid).append('<h4 class="ui header"><div class="content">Stats</div></h4>');
-                        $('#cblist_'+bid).append('<div class="" id="widget_'+hash+'" data-name="'+hash+'">');
-
-                        $('#widget_'+hash).append('<table id="tset_' + hash + '" class="table table-striped table-bordered">');
-                        $('#tset_'+hash).append('<thead id="tha_' + hash + '"/>');
-                        $('#tset_'+hash).append('<tbody id="tbd_' + hash + '"/>');
-                        //$('#tha_'+hash).append('<tr> <th>Name</th> <th>Host</th> <th>Port</th> <th>Database</th> <th>Force User</th> <th>Pool Size</th> <th>Reserve Pool</th> <th>Pool Mode</th> <th>Max Connections</th> <th>Current Connections</th></tr>');
-                        $('#tha_'+hash).append('<tr> <th>Database</th> <th>Total requests</th> <th>Total received</th> <th>Total Sent</th> <th>Total query time</th> <th>Avg Req</th> <th>Avg Recv</th> <th>Avg Sent</th> <th>Avg Query</th></tr>');
-                        $.each(bouncers.results, function(i, database) {
-                            addOption( hash, database, info );
-                        });
-
-                        $('#tset_'+hash).DataTable();
-                    }
-                });
-            });
-      });
-
-    $( "#pools" ).click(function( event ) {
-            event.preventDefault();
-
-            $(this).toggleClass('active');
-            $('body').css('cursor', 'wait');
-
-            // var mt = $("#soemid").val();
-
-            var token = myLocalStorage.get('ngStorage-token');
-
-            //var id = $('#userid').val();
-
-            //var url= "/api/status/"+ id +"/databases";
-            var url= "/api/status/pools";
-            // $('#msg').html('Calling API : <pre class="json">' + library.json.syntaxHighlight(JSON.stringify(token, null, 4)) + '</pre>');
-
-            // Filing out the json freeform text field
-            // $('#apidata').html(JSON.stringify(fdata));
-
-            // Assign handlers immediately after making the request
-            $.ajax({
-                method: "GET",
-                url: url,
-                // data: JSON.stringify(fdata),
-                cache: false,
-                beforeSend: function(xhr, settings) {
-                    if (token) {
-                        xhr.setRequestHeader('Authorization','Bearer ' + token);
-                    }
-                    xhr.setRequestHeader('Content-Type', 'application/json');
-                    xhr.overrideMimeType( 'application/json' );
-                    start_time = new Date().getTime();
-                }
-            })
-            .done(function( data ) {
-                $('body').css('cursor', 'default');
-                var request_time = new Date().getTime() - start_time;
-                if ( console && console.log ) {
-                    //console.log( data );
-                }
-
-                $('#mainview').empty();
-
-                function addOption( hash, res, bouncer ) {
+                if(section_id == 'pools') {
                     $('#tbd_' + hash).append('<tr> <td>'+res.database+'</td> <td>'+res.user+'</td> <td>'+res.cl_active+'</td> <td>'+res.cl_waiting+'</td> <td>'+res.sv_active+'</td> <td>'+res.sv_idle+'</td> <td>'+res.sv_used+'</td> <td>'+res.sv_tested+'</td> <td>'+res.sv_login+'</td> <td>'+res.maxwait+'</td> </tr>');
-                    //$('#tbd_' + hash).append('<tr> <td>'+res.database+'</td> <td>'+res.total_requests+'</td> <td>'+res.total_received+'</td> <td>'+res.total_sent+'</td> <td>'+res.total_query_time+'</td> <td>'+res.avg_req+'</td> <td>'+res.avg_recv+'</td> <td>'+res.avg_sent+'</td> <td>'+res.avg_query+'</td></tr>');
-                    //$('#tbd_' + hash).append('<tr> <td>'+bouncer.label+'</td> <td>'+res.host+'</td> <td>'+res.port+'</td> <td>'+res.database+'</td> <td>'+res.force_user+'</td> <td>'+res.pool_size+'</td> <td>'+res.reserve_pool+'</td> <td>'+res.pool_mode+'</td> <td>'+res.max_connections+'</td> <td>'+res.current_connections+'</td> </tr>');
                 }
-
-                $.each(data, function(i, bouncers) {
-                    var info= bouncers.info;
-                    var bid= bouncers.info.id;
-                    var blab= bouncers.info.label;
-                    if(bouncers.error) {
-                        $('#mainview').append('<div id="bouncer_'+bid+'"><h3>'+blab+' ('+info.dsns.host+'): <i id=status_'+bid+'>Offline</i></h3></div>');
-                        $('#status_'+bid).removeClass().addClass("alert alert-warning");
-                        $('#bouncer_'+bid).append('<div id="divcblist_'+bid+'">');
-                        $('#divcblist_'+bid).append('<div id="cblist_'+bid+'">');
-                    } else {
-                        var hash = md5(bouncers.info.id); // "2063c1608d6e0baf80249c42e2be5804"
-
-                        $('#mainview').append('<div id="bouncer_'+bid+'"><h3>'+blab+' ('+info.dsns.host+'): <i id=status_'+bid+'>Online</i></h3></div>');
-                        $('#status_'+bid).removeClass().addClass("alert alert-success");
-                        $('#bouncer_'+bid).append('<div id="divcblist_'+bid+'">');
-                        $('#divcblist_'+bid).append('<div id="cblist_'+bid+'">');
-
-                        $('#cblist_'+bid).append('<h4 class="ui header"><div class="content">Pools</div></h4>');
-                        $('#cblist_'+bid).append('<div class="" id="widget_'+hash+'" data-name="'+hash+'">');
-
-                        $('#widget_'+hash).append('<table id="tset_' + hash + '" class="table table-striped table-bordered">');
-                        $('#tset_'+hash).append('<thead id="tha_' + hash + '"/>');
-                        $('#tset_'+hash).append('<tbody id="tbd_' + hash + '"/>');
-                        $('#tha_'+hash).append('<tr> <th>Database</th> <th>User</th> <th>Cl Active</th> <th>Cl Waiting</th> <th>Sv Active</th> <th>Sv Idle</th> <th>Sv Used</th> <th>Sv Tested</th> <th>Sv Login</th> <th>MaxWait</th> </tr>');
-                        //$('#tha_'+hash).append('<tr> <th>Name</th> <th>Host</th> <th>Port</th> <th>Database</th> <th>Force User</th> <th>Pool Size</th> <th>Reserve Pool</th> <th>Pool Mode</th> <th>Max Connections</th> <th>Current Connections</th></tr>');
-                        //$('#tha_'+hash).append('<tr> <th>Database</th> <th>Total requests</th> <th>Total received</th> <th>Total Sent</th> <th>Total query time</th> <th>Avg Req</th> <th>Avg Recv</th> <th>Avg Sent</th> <th>Avg Query</th></tr>');
-                        $.each(bouncers.results, function(i, database) {
-                            addOption( hash, database, info );
-                        });
-
-                        $('#tset_'+hash).DataTable();
-                    }
-                });
-            });
-      });
-
-    $( "#clients" ).click(function( event ) {
-            event.preventDefault();
-
-            $(this).toggleClass('active');
-            $('body').css('cursor', 'wait');
-
-            // var mt = $("#soemid").val();
-
-            var token = myLocalStorage.get('ngStorage-token');
-
-            //var id = $('#userid').val();
-
-            //var url= "/api/status/"+ id +"/databases";
-            var url= "/api/status/clients";
-            // $('#msg').html('Calling API : <pre class="json">' + library.json.syntaxHighlight(JSON.stringify(token, null, 4)) + '</pre>');
-
-            // Filing out the json freeform text field
-            // $('#apidata').html(JSON.stringify(fdata));
-
-            // Assign handlers immediately after making the request
-            $.ajax({
-                method: "GET",
-                url: url,
-                // data: JSON.stringify(fdata),
-                cache: false,
-                beforeSend: function(xhr, settings) {
-                    if (token) {
-                        xhr.setRequestHeader('Authorization','Bearer ' + token);
-                    }
-                    xhr.setRequestHeader('Content-Type', 'application/json');
-                    xhr.overrideMimeType( 'application/json' );
-                    start_time = new Date().getTime();
-                }
-            })
-            .done(function( data ) {
-                $('body').css('cursor', 'default');
-                var request_time = new Date().getTime() - start_time;
-                if ( console && console.log ) {
-                    //console.log( data );
-                }
-
-                $('#mainview').empty();
-
-                function addOption( hash, res, bouncer ) {
+                if(section_id == 'clients') {
                     $('#tbd_' + hash).append('<tr> <td>'+res.type+'</td> <td>'+res.state+'</td> <td>'+res.user+'</td> <td>'+res.database+'</td> <td>'+res.addr+'</td> <td>'+res.local_addr+'</td> <td>'+res.connect_time+'</td> <td>'+res.request_time+'</td><td>'+res.ptr+'</td> <td>'+res.link+'</td> <td>'+res.remote_pid+'</td> <td>'+res.tls+'</td> </tr>');
-                    //$('#tbd_' + hash).append('<tr> <td>'+res.database+'</td> <td>'+res.total_requests+'</td> <td>'+res.total_received+'</td> <td>'+res.total_sent+'</td> <td>'+res.total_query_time+'</td> <td>'+res.avg_req+'</td> <td>'+res.avg_recv+'</td> <td>'+res.avg_sent+'</td> <td>'+res.avg_query+'</td></tr>');
-                    //$('#tbd_' + hash).append('<tr> <td>'+bouncer.label+'</td> <td>'+res.host+'</td> <td>'+res.port+'</td> <td>'+res.database+'</td> <td>'+res.force_user+'</td> <td>'+res.pool_size+'</td> <td>'+res.reserve_pool+'</td> <td>'+res.pool_mode+'</td> <td>'+res.max_connections+'</td> <td>'+res.current_connections+'</td> </tr>');
                 }
-
-                $.each(data, function(i, bouncers) {
-                    var info= bouncers.info;
-                    var bid= bouncers.info.id;
-                    var blab= bouncers.info.label;
-                    if(bouncers.error) {
-                        $('#mainview').append('<div id="bouncer_'+bid+'"><h3>'+blab+' ('+info.dsns.host+'): <i id=status_'+bid+'>Offline</i></h3></div>');
-                        $('#status_'+bid).removeClass().addClass("alert alert-warning");
-                        $('#bouncer_'+bid).append('<div id="divcblist_'+bid+'">');
-                        $('#divcblist_'+bid).append('<div id="cblist_'+bid+'">');
-                    } else {
-                        var hash = md5(bouncers.info.id); // "2063c1608d6e0baf80249c42e2be5804"
-
-                        $('#mainview').append('<div id="bouncer_'+bid+'"><h3>'+blab+' ('+info.dsns.host+'): <i id=status_'+bid+'>Online</i></h3></div>');
-                        $('#status_'+bid).removeClass().addClass("alert alert-success");
-                        $('#bouncer_'+bid).append('<div id="divcblist_'+bid+'">');
-                        $('#divcblist_'+bid).append('<div id="cblist_'+bid+'">');
-
-                        $('#cblist_'+bid).append('<h4 class="ui header"><div class="content">Clients</div></h4>');
-                        $('#cblist_'+bid).append('<div class="" id="widget_'+hash+'" data-name="'+hash+'">');
-
-                        $('#widget_'+hash).append('<table id="tset_' + hash + '" class="table table-striped table-bordered">');
-                        $('#tset_'+hash).append('<thead id="tha_' + hash + '"/>');
-                        $('#tset_'+hash).append('<tbody id="tbd_' + hash + '"/>');
-                        $('#tha_'+hash).append('<tr> <th>Type</th> <th>State</th> <th>User</th> <th>Database</th> <th>Source</th> <th>Destination</th> <th>Connect time</th> <th>Request time</th> <th>Ptr</th> <th>Link</th> <th>Remote PID</th> <th>TLS</th> </tr>');
-                        //$('#tha_'+hash).append('<tr> <th>Name</th> <th>Host</th> <th>Port</th> <th>Database</th> <th>Force User</th> <th>Pool Size</th> <th>Reserve Pool</th> <th>Pool Mode</th> <th>Max Connections</th> <th>Current Connections</th></tr>');
-                        //$('#tha_'+hash).append('<tr> <th>Database</th> <th>Total requests</th> <th>Total received</th> <th>Total Sent</th> <th>Total query time</th> <th>Avg Req</th> <th>Avg Recv</th> <th>Avg Sent</th> <th>Avg Query</th></tr>');
-                        $.each(bouncers.results, function(i, database) {
-                            addOption( hash, database, info );
-                        });
-
-                        $('#tset_'+hash).DataTable();
-                    }
-                });
-            });
-      });
-
-    $( "#conf" ).click(function( event ) {
-            event.preventDefault();
-
-            $(this).toggleClass('active');
-            $('body').css('cursor', 'wait');
-
-            // var mt = $("#soemid").val();
-
-            var token = myLocalStorage.get('ngStorage-token');
-
-            //var id = $('#userid').val();
-
-            //var url= "/api/status/"+ id +"/databases";
-            var url= "/api/status/config";
-            // $('#msg').html('Calling API : <pre class="json">' + library.json.syntaxHighlight(JSON.stringify(token, null, 4)) + '</pre>');
-
-            // Filing out the json freeform text field
-            // $('#apidata').html(JSON.stringify(fdata));
-
-            // Assign handlers immediately after making the request
-            $.ajax({
-                method: "GET",
-                url: url,
-                // data: JSON.stringify(fdata),
-                cache: false,
-                beforeSend: function(xhr, settings) {
-                    if (token) {
-                        xhr.setRequestHeader('Authorization','Bearer ' + token);
-                    }
-                    xhr.setRequestHeader('Content-Type', 'application/json');
-                    xhr.overrideMimeType( 'application/json' );
-                    start_time = new Date().getTime();
+                if(section_id == 'servers') {
+                    $('#tbd_' + hash).append('<tr> <td>'+res.type+'</td> <td>'+res.state+'</td> <td>'+res.user+'</td> <td>'+res.database+'</td> <td>'+res.addr+'</td> <td>'+res.local_addr+'</td> <td>'+res.connect_time+'</td> <td>'+res.request_time+'</td><td>'+res.ptr+'</td> <td>'+res.link+'</td> <td>'+res.remote_pid+'</td> <td>'+res.tls+'</td> </tr>');
                 }
-            })
-            .done(function( data ) {
-                $('body').css('cursor', 'default');
-                var request_time = new Date().getTime() - start_time;
-                if ( console && console.log ) {
-                    //console.log( data );
-                }
-
-                $('#mainview').empty();
-
-                function addOption( hash, res, bouncer ) {
+                if(section_id == 'config') {
                     $('#tbd_' + hash).append('<tr> <td>'+res.key+'</td> <td>'+res.value+'</td> <td>'+res.changeable+'</td> </tr>');
-                    //$('#tbd_' + hash).append('<tr> <td>'+res.database+'</td> <td>'+res.total_requests+'</td> <td>'+res.total_received+'</td> <td>'+res.total_sent+'</td> <td>'+res.total_query_time+'</td> <td>'+res.avg_req+'</td> <td>'+res.avg_recv+'</td> <td>'+res.avg_sent+'</td> <td>'+res.avg_query+'</td></tr>');
-                    //$('#tbd_' + hash).append('<tr> <td>'+bouncer.label+'</td> <td>'+res.host+'</td> <td>'+res.port+'</td> <td>'+res.database+'</td> <td>'+res.force_user+'</td> <td>'+res.pool_size+'</td> <td>'+res.reserve_pool+'</td> <td>'+res.pool_mode+'</td> <td>'+res.max_connections+'</td> <td>'+res.current_connections+'</td> </tr>');
                 }
-
-                $.each(data, function(i, bouncers) {
-                    var info= bouncers.info;
-                    var bid= bouncers.info.id;
-                    var blab= bouncers.info.label;
-                    if(bouncers.error) {
-                        $('#mainview').append('<div id="bouncer_'+bid+'"><h3>'+blab+' ('+info.dsns.host+'): <i id=status_'+bid+'>Offline</i></h3></div>');
-                        $('#status_'+bid).removeClass().addClass("alert alert-warning");
-                        $('#bouncer_'+bid).append('<div id="divcblist_'+bid+'">');
-                        $('#divcblist_'+bid).append('<div id="cblist_'+bid+'">');
-                    } else {
-                        var hash = md5(bouncers.info.id); // "2063c1608d6e0baf80249c42e2be5804"
-
-                        $('#mainview').append('<div id="bouncer_'+bid+'"><h3>'+blab+' ('+info.dsns.host+'): <i id=status_'+bid+'>Online</i></h3></div>');
-                        $('#status_'+bid).removeClass().addClass("alert alert-success");
-                        $('#bouncer_'+bid).append('<div id="divcblist_'+bid+'">');
-                        $('#divcblist_'+bid).append('<div id="cblist_'+bid+'">');
-
-                        $('#cblist_'+bid).append('<h4 class="ui header"><div class="content">Config settings</div></h4>');
-                        $('#cblist_'+bid).append('<div class="" id="widget_'+hash+'" data-name="'+hash+'">');
-
-                        $('#widget_'+hash).append('<table id="tset_' + hash + '" class="table table-striped table-bordered">');
-                        $('#tset_'+hash).append('<thead id="tha_' + hash + '"/>');
-                        $('#tset_'+hash).append('<tbody id="tbd_' + hash + '"/>');
-                        $('#tha_'+hash).append('<tr> <th>Key</th> <th>Value</th> <th>Changeable</th> </tr>');
-                        //$('#tha_'+hash).append('<tr> <th>Name</th> <th>Host</th> <th>Port</th> <th>Database</th> <th>Force User</th> <th>Pool Size</th> <th>Reserve Pool</th> <th>Pool Mode</th> <th>Max Connections</th> <th>Current Connections</th></tr>');
-                        //$('#tha_'+hash).append('<tr> <th>Database</th> <th>Total requests</th> <th>Total received</th> <th>Total Sent</th> <th>Total query time</th> <th>Avg Req</th> <th>Avg Recv</th> <th>Avg Sent</th> <th>Avg Query</th></tr>');
-                        $.each(bouncers.results, function(i, database) {
-                            addOption( hash, database, info );
-                        });
-
-                        $('#tset_'+hash).DataTable();
-                    }
-                });
-            });
-      });
-
-    $( "#current" ).click(function( event ) {
-            event.preventDefault();
-
-            $(this).toggleClass('active');
-            $('body').css('cursor', 'wait');
-
-            // var mt = $("#soemid").val();
-
-            var token = myLocalStorage.get('ngStorage-token');
-
-            //var id = $('#userid').val();
-
-            //var url= "/api/status/"+ id +"/databases";
-            var url= "/api/status/lists";
-            // $('#msg').html('Calling API : <pre class="json">' + library.json.syntaxHighlight(JSON.stringify(token, null, 4)) + '</pre>');
-
-            // Filing out the json freeform text field
-            // $('#apidata').html(JSON.stringify(fdata));
-
-            // Assign handlers immediately after making the request
-            $.ajax({
-                method: "GET",
-                url: url,
-                // data: JSON.stringify(fdata),
-                cache: false,
-                beforeSend: function(xhr, settings) {
-                    if (token) {
-                        xhr.setRequestHeader('Authorization','Bearer ' + token);
-                    }
-                    xhr.setRequestHeader('Content-Type', 'application/json');
-                    xhr.overrideMimeType( 'application/json' );
-                    start_time = new Date().getTime();
-                }
-            })
-            .done(function( data ) {
-                $('body').css('cursor', 'default');
-                var request_time = new Date().getTime() - start_time;
-                if ( console && console.log ) {
-                    console.log( data );
-                }
-
-                $('#mainview').empty();
-
-                function addOption( hash, res, bouncer ) {
+                if(section_id == 'current') {
                     $('#tbd_' + hash).append('<tr> <td>'+res.list+'</td> <td>'+res.items+'</td> </tr>');
-                    //$('#tbd_' + hash).append('<tr> <td>'+res.database+'</td> <td>'+res.total_requests+'</td> <td>'+res.total_received+'</td> <td>'+res.total_sent+'</td> <td>'+res.total_query_time+'</td> <td>'+res.avg_req+'</td> <td>'+res.avg_recv+'</td> <td>'+res.avg_sent+'</td> <td>'+res.avg_query+'</td></tr>');
-                    //$('#tbd_' + hash).append('<tr> <td>'+bouncer.label+'</td> <td>'+res.host+'</td> <td>'+res.port+'</td> <td>'+res.database+'</td> <td>'+res.force_user+'</td> <td>'+res.pool_size+'</td> <td>'+res.reserve_pool+'</td> <td>'+res.pool_mode+'</td> <td>'+res.max_connections+'</td> <td>'+res.current_connections+'</td> </tr>');
                 }
+            }
 
-                $.each(data, function(i, bouncers) {
-                    var info= bouncers.info;
-                    var bid= bouncers.info.id;
-                    var blab= bouncers.info.label;
-                    if(bouncers.error) {
-                        $('#mainview').append('<div id="bouncer_'+bid+'"><h3>'+blab+' ('+info.dsns.host+'): <i id=status_'+bid+'>Offline</i></h3></div>');
-                        $('#status_'+bid).removeClass().addClass("alert alert-warning");
-                        $('#bouncer_'+bid).append('<div id="divcblist_'+bid+'">');
-                        $('#divcblist_'+bid).append('<div id="cblist_'+bid+'">');
-                    } else {
-                        var hash = md5(bouncers.info.id); // "2063c1608d6e0baf80249c42e2be5804"
+            var info= bouncers.info;
+            var bid= bouncers.info.id;
+            var blab= bouncers.info.label;
+            var hash = md5(bouncers.info.id); // "2063c1608d6e0baf80249c42e2be5804"
 
-                        $('#mainview').append('<div id="bouncer_'+bid+'"><h3>'+blab+' ('+info.dsns.host+'): <i id=status_'+bid+'>Online</i></h3></div>');
-                        $('#status_'+bid).removeClass().addClass("alert alert-success");
-                        $('#bouncer_'+bid).append('<div id="divcblist_'+bid+'">');
-                        $('#divcblist_'+bid).append('<div id="cblist_'+bid+'">');
+            $('#mainview').append('<div class="list-group-item d-flex justify-content-between align-items-center" id="bouncer_'+bid+'"><div>'+blab+' ('+info.dsns.host+')</div></div>');
 
-                        $('#cblist_'+bid).append('<h4 class="ui header"><div class="content">Runtime totals</div></h4>');
-                        $('#cblist_'+bid).append('<div class="" id="widget_'+hash+'" data-name="'+hash+'">');
+            $('#bouncer_'+bid).append('<div id="divcblist_'+bid+'">');
+            $('#divcblist_'+bid).append('<div id="cblist_'+bid+'">');
+            $('#cblist_'+bid).html('<i id=status_'+bid+'>Online</i>');
+            $('#status_'+bid).removeClass().addClass("alert alert-success pull-right");
 
-                        $('#widget_'+hash).append('<table id="tset_' + hash + '" class="table table-striped table-bordered">');
-                        $('#tset_'+hash).append('<thead id="tha_' + hash + '"/>');
-                        $('#tset_'+hash).append('<tbody id="tbd_' + hash + '"/>');
-                        $('#tha_'+hash).append('<tr> <th>List</th> <th>Items</th> </tr>');
-                        //$('#tha_'+hash).append('<tr> <th>Name</th> <th>Host</th> <th>Port</th> <th>Database</th> <th>Force User</th> <th>Pool Size</th> <th>Reserve Pool</th> <th>Pool Mode</th> <th>Max Connections</th> <th>Current Connections</th></tr>');
-                        //$('#tha_'+hash).append('<tr> <th>Database</th> <th>Total requests</th> <th>Total received</th> <th>Total Sent</th> <th>Total query time</th> <th>Avg Req</th> <th>Avg Recv</th> <th>Avg Sent</th> <th>Avg Query</th></tr>');
-                        $.each(bouncers.results, function(i, database) {
-                            addOption( hash, database, info );
-                        });
+            $('#cblist_'+bid).append('<h2 class="ui header"><div class="content"><p>'+section_id+'</p></div></h2>');
+            $('#cblist_'+bid).append('<div class="" id="widget_'+hash+'" data-name="'+hash+'">');
 
-                        $('#tset_'+hash).DataTable();
-                    }
-                });
+            $('#widget_'+hash).append('<table id="tset_' + hash + '" class="table table-striped table-bordered">');
+            $('#tset_'+hash).append('<thead id="tha_' + hash + '"/>');
+            $('#tset_'+hash).append('<tbody id="tbd_' + hash + '"/>');
+
+            if(section_id == 'databases') {
+                $('#tha_'+hash).append('<tr> <th>Name</th> <th>Host</th> <th>Port</th> <th>Database</th> <th>Force User</th> <th>Pool Size</th> <th>Reserve Pool</th> <th>Pool Mode</th> <th>Max Connections</th> <th>Current Connections</th></tr>');
+            }
+            if(section_id == 'stats') {
+                $('#tha_'+hash).append('<tr> <th>Database</th> <th>Total requests</th> <th>Total received</th> <th>Total Sent</th> <th>Total query time</th> <th>Avg Req</th> <th>Avg Recv</th> <th>Avg Sent</th> <th>Avg Query</th></tr>');
+            }
+            if(section_id == 'pools') {
+                $('#tha_'+hash).append('<tr> <th>Database</th> <th>User</th> <th>Cl Active</th> <th>Cl Waiting</th> <th>Sv Active</th> <th>Sv Idle</th> <th>Sv Used</th> <th>Sv Tested</th> <th>Sv Login</th> <th>MaxWait</th> </tr>');
+            }
+            if(section_id == 'clients') {
+                $('#tha_'+hash).append('<tr> <th>Type</th> <th>State</th> <th>User</th> <th>Database</th> <th>Source</th> <th>Destination</th> <th>Connect time</th> <th>Request time</th> <th>Ptr</th> <th>Link</th> <th>Remote PID</th> <th>TLS</th> </tr>');
+            }
+            if(section_id == 'servers') {
+                $('#tha_'+hash).append('<tr> <th>Type</th> <th>State</th> <th>User</th> <th>Database</th> <th>Source</th> <th>Destination</th> <th>Connect time</th> <th>Request time</th> <th>Ptr</th> <th>Link</th> <th>Remote PID</th> <th>TLS</th> </tr>');
+            }
+            if(section_id == 'config') {
+                $('#tha_'+hash).append('<tr> <th>Key</th> <th>Value</th> <th>Changeable</th> </tr>');
+            }
+            if(section_id == 'current') {
+                $('#tha_'+hash).append('<tr> <th>List</th> <th>Items</th> </tr>');
+            }
+
+            $.each(bouncers.results, function(i, database) {
+                addOption( hash, database, info ,section_id);
             });
-      });
 
-    $( "#servers" ).click(function( event ) {
-            event.preventDefault();
+            $('#tset_'+hash).DataTable();
+        }
 
-            $(this).toggleClass('active');
-            $('body').css('cursor', 'wait');
+        var token = myLocalStorage.get('ngStorage-token');
+        //var id = $('#userid').val();
+        //var url= "/api/status/databases";
+        var url= "/api/status/"+this.id;
+        // $('#msg').html('Calling API : <pre class="json">' + library.json.syntaxHighlight(JSON.stringify(token, null, 4)) + '</pre>');
+        // $('#apidata').html(JSON.stringify(fdata));
 
-            // var mt = $("#soemid").val();
-
-            var token = myLocalStorage.get('ngStorage-token');
-
-            //var id = $('#userid').val();
-
-            //var url= "/api/status/"+ id +"/databases";
-            var url= "/api/status/servers";
-            // $('#msg').html('Calling API : <pre class="json">' + library.json.syntaxHighlight(JSON.stringify(token, null, 4)) + '</pre>');
-
-            // Filing out the json freeform text field
-            // $('#apidata').html(JSON.stringify(fdata));
-
-            // Assign handlers immediately after making the request
-            $.ajax({
-                method: "GET",
-                url: url,
-                // data: JSON.stringify(fdata),
-                cache: false,
-                beforeSend: function(xhr, settings) {
-                    if (token) {
-                        xhr.setRequestHeader('Authorization','Bearer ' + token);
-                    }
-                    xhr.setRequestHeader('Content-Type', 'application/json');
-                    xhr.overrideMimeType( 'application/json' );
-                    start_time = new Date().getTime();
+        // Assign handlers immediately after making the request
+        $.ajax({
+            method: "GET",
+            url: url,
+            // data: JSON.stringify(fdata),
+            cache: false,
+            beforeSend: function(xhr, settings) {
+                if (token) {
+                    xhr.setRequestHeader('Authorization','Bearer ' + token);
                 }
-            })
-            .done(function( data ) {
-                $('body').css('cursor', 'default');
-                var request_time = new Date().getTime() - start_time;
-                if ( console && console.log ) {
-                    //console.log( data );
+                xhr.setRequestHeader('Content-Type', 'application/json');
+                xhr.overrideMimeType( 'application/json' );
+                start_time = new Date().getTime();
+            }
+        }).done(function( data ) {
+            $('body').css('cursor', 'default');
+            $('#msg').html('Found ' + Object.keys(data).length + ' results');
+            $('#msg').removeClass().addClass("alert alert-info");
+            console.log(data);
+            var request_time = new Date().getTime() - start_time;
+            if ( console && console.log ) {
+                console.log( data );
+            }
+
+            $('#mainview').empty().addClass("list-group");
+
+            $.each(data, function(i, bouncers) {
+                if(bouncers.error) {
+                    bouncerInError(bouncers);
+                } else {
+                    bouncerInSuccess(bouncers,section_id);
                 }
-
-                $('#mainview').empty();
-
-                function addOption( hash, res, bouncer ) {
-                    $('#tbd_' + hash).append('<tr> <td>'+res.type+'</td> <td>'+res.state+'</td> <td>'+res.user+'</td> <td>'+res.database+'</td> <td>'+res.addr+'</td> <td>'+res.local_addr+'</td> <td>'+res.connect_time+'</td> <td>'+res.request_time+'</td><td>'+res.ptr+'</td> <td>'+res.link+'</td> <td>'+res.remote_pid+'</td> <td>'+res.tls+'</td> </tr>');
-                    //$('#tbd_' + hash).append('<tr> <td>'+res.database+'</td> <td>'+res.total_requests+'</td> <td>'+res.total_received+'</td> <td>'+res.total_sent+'</td> <td>'+res.total_query_time+'</td> <td>'+res.avg_req+'</td> <td>'+res.avg_recv+'</td> <td>'+res.avg_sent+'</td> <td>'+res.avg_query+'</td></tr>');
-                    //$('#tbd_' + hash).append('<tr> <td>'+bouncer.label+'</td> <td>'+res.host+'</td> <td>'+res.port+'</td> <td>'+res.database+'</td> <td>'+res.force_user+'</td> <td>'+res.pool_size+'</td> <td>'+res.reserve_pool+'</td> <td>'+res.pool_mode+'</td> <td>'+res.max_connections+'</td> <td>'+res.current_connections+'</td> </tr>');
-                }
-
-                $.each(data, function(i, bouncers) {
-                    var info= bouncers.info;
-                    var bid= bouncers.info.id;
-                    var blab= bouncers.info.label;
-                    if(bouncers.error) {
-                        $('#mainview').append('<div id="bouncer_'+bid+'"><h3>'+blab+' ('+info.dsns.host+'): <i id=status_'+bid+'>Offline</i></h3></div>');
-                        $('#status_'+bid).removeClass().addClass("alert alert-warning");
-                        $('#bouncer_'+bid).append('<div id="divcblist_'+bid+'">');
-                        $('#divcblist_'+bid).append('<div id="cblist_'+bid+'">');
-                    } else {
-                        var hash = md5(bouncers.info.id); // "2063c1608d6e0baf80249c42e2be5804"
-
-                        $('#mainview').append('<div id="bouncer_'+bid+'"><h3>'+blab+' ('+info.dsns.host+'): <i id=status_'+bid+'>Online</i></h3></div>');
-                        $('#status_'+bid).removeClass().addClass("alert alert-success");
-                        $('#bouncer_'+bid).append('<div id="divcblist_'+bid+'">');
-                        $('#divcblist_'+bid).append('<div id="cblist_'+bid+'">');
-
-                        $('#cblist_'+bid).append('<h4 class="ui header"><div class="content">Servers</div></h4>');
-                        $('#cblist_'+bid).append('<div class="" id="widget_'+hash+'" data-name="'+hash+'">');
-
-                        $('#widget_'+hash).append('<table id="tset_' + hash + '" class="table table-striped table-bordered">');
-                        $('#tset_'+hash).append('<thead id="tha_' + hash + '"/>');
-                        $('#tset_'+hash).append('<tbody id="tbd_' + hash + '"/>');
-
-                        $('#tha_'+hash).append('<tr> <th>Type</th> <th>State</th> <th>User</th> <th>Database</th> <th>Source</th> <th>Destination</th> <th>Connect time</th> <th>Request time</th> <th>Ptr</th> <th>Link</th> <th>Remote PID</th> <th>TLS</th> </tr>');
-                        //$('#tha_'+hash).append('<tr> <th>Name</th> <th>Host</th> <th>Port</th> <th>Database</th> <th>Force User</th> <th>Pool Size</th> <th>Reserve Pool</th> <th>Pool Mode</th> <th>Max Connections</th> <th>Current Connections</th></tr>');
-                        //$('#tha_'+hash).append('<tr> <th>Database</th> <th>Total requests</th> <th>Total received</th> <th>Total Sent</th> <th>Total query time</th> <th>Avg Req</th> <th>Avg Recv</th> <th>Avg Sent</th> <th>Avg Query</th></tr>');
-                        $.each(bouncers.results, function(i, database) {
-                            addOption( hash, database, info );
-                        });
-
-                        $('#tset_'+hash).DataTable();
-                    }
-                });
             });
-      });
+        });
+    });
+
 
     $( "#allreqbutton" ).click(function( event ) {
             event.preventDefault();
@@ -722,254 +269,4 @@ $( document ).ready(function() {
         }
      }
 
-    $( "#ticketreset" ).click(function( event ) {
-        lhash = "empty";
-        $('#response').empty().removeClass();
-        $('body').css('cursor', 'default');
-    });
-
-    $( "#resetbutton" ).click(function( event ) {
-            event.preventDefault();
-            $('#msg').html('<p>Resetting session</p>');
-            $('body').css('cursor', 'wait');
-            $('#map-wrap').empty();
-
-            $('#apidata').empty();
-            $('body').css('cursor', 'default');
-    });
-
-    $( "#ticketbutton" ).click(function( event ) {
-            event.preventDefault();
-
-            $('body').css('cursor', 'wait');
-
-            // Get some values from elements on the page:
-            var mt = $("#mediatype").val();
-            var mc = $("#mediacount").val();
-
-            var token = myLocalStorage.get('ngStorage-token');
-
-            var url= "/api/tickets";
-
-            // Get history data
-
-            var fdata = {};
-
-            /* Gather form data */
-
-            fdata['_token']   = $('input:hidden[name=_token]').val();
-            fdata['title']    = $('#title').val();
-            //fdata['category'] = $('#category').val();
-            //fdata['priority'] = $('#priority').val();
-            fdata['email'] = $('#email').val();
-            fdata['gsm'] = $('#gsm').val();
-            fdata['description']  = $('#description').val();
-            // $('#msg').html('Calling API : <pre class="json">' + library.json.syntaxHighlight(JSON.stringify(fdata, null, 4)) + '</pre>');
-
-            var fhash = md5(fdata); //e.g. "2063c1608d6e0baf80249c42e2be5804"
-
-            if ( fhash == lhash ) {
-                $('#response').html("Identical Ticket has already been opened.");
-                $('#response').removeClass().addClass("alert alert-warning");
-                $('body').css('cursor', 'default');
-                $("#ticketbutton").effect( 'pulsate', options, 500);
-                return false;
-            }
-
-            var options = {};
-
-            // Assign handlers immediately after making the request,
-            $.ajax({
-                method: "POST",
-                url: url,
-                data: fdata,
-                cache: false,
-                beforeSend: function(xhr, settings) {
-
-                    if (token) {
-                        xhr.setRequestHeader('Authorization','Bearer ' + token);
-                    }
-                    // xhr.setRequestHeader('Content-Type', 'application/json');
-		            // Content-Type:application/x-www-form-urlencoded
-                    // xhr.overrideMimeType( 'application/json' );
-                    start_time = new Date().getTime();
-                }
-            })
-            .done(function( data ) {
-                $('#ticketform input[type=text], textarea').each(function (i,item) {
-                    //console.log(this);
-                    $(this).parent().parent().removeClass("has-error");
-                    $('span' ).remove();
-                });
-
-                $('#response').html(data.message + ' #' + data.ticket_id);
-                $('#response').removeClass().addClass("alert alert-success");
-
-                //$('#msg').append('<p>Success API : ' + JSON.stringify(data) + ' (in ' + request_time + 'ms.)</p>');
-                //$('#msg > p:last-child').removeClass().addClass("alert alert-success");
-                //return true;
-                // register the hash
-                lhash = fhash;
-
-                return true;
-            })
-            .fail(function( data ) {
-                var request_time = new Date().getTime() - start_time;
-
-                var parsed = data.responseJSON;
-
-                $('#ticketform input[type=text], textarea').each(function (i,item) {
-                    //console.log(this);
-                    $(this).parent().parent().removeClass("has-error");
-                    $('span' ).remove();
-                });
-
-                //$('#ticketform input[type=text]').each(function (i,item)
-                $(Object.keys(parsed)).each(function (i,key) {
-                    var spanner='<span class="help-block"><strong>' + parsed[key][0] + '</strong></span>';
-                    $('#'+key).after(spanner);
-                    $('#'+key).parent().parent().addClass("has-error");
-                });
-
-            })
-            .always(function() {
-                $('body').css('cursor', 'default');
-                $("#ticketbutton").effect( 'pulsate', options, 500);
-
-                return true;
-            });
-      });
-
-    $( "#allticketsbutton" ).click(function( event ) {
-            event.preventDefault();
-
-            $('body').css('cursor', 'wait');
-
-            // Get some values from elements on the page:
-            var mt = $("#mediatype").val();
-            var mc = $("#mediacount").val();
-
-            var token = myLocalStorage.get('ngStorage-token');
-
-            var url= "/api/tickets";
-
-            // Get history data
-
-            var fdata = {};
-
-            /* Gather form data */
-
-            fdata['_token']   = $('input:hidden[name=_token]').val();
-            fdata['title']    = $('#title').val();
-            //fdata['category'] = $('#category').val();
-            //fdata['priority'] = $('#priority').val();
-            fdata['email'] = $('#email').val();
-            fdata['gsm'] = $('#gsm').val();
-            fdata['description']  = $('#description').val();
-            // $('#msg').html('Calling API : <pre class="json">' + library.json.syntaxHighlight(JSON.stringify(fdata, null, 4)) + '</pre>');
-
-            var fhash = md5(fdata); //e.g. "2063c1608d6e0baf80249c42e2be5804"
-            //if ( console && console.log ) {
-                //console.log(fhash);
-            //}
-
-            if ( fhash == lhash ) {
-                $('#response').html("Identical Ticket has already been opened.");
-                $('#response').removeClass().addClass("alert alert-warning");
-                $('body').css('cursor', 'default');
-                $("#ticketbutton").effect( 'pulsate', options, 500);
-                return false;
-            }
-
-            var options = {};
-
-            // Assign handlers immediately after making the request,
-            $.ajax({
-                method: "POST",
-                url: url,
-                data: fdata,
-                cache: false,
-                beforeSend: function(xhr, settings) {
-
-                    if (token) {
-                        xhr.setRequestHeader('Authorization','Bearer ' + token);
-                    }
-                    // xhr.setRequestHeader('Content-Type', 'application/json');
-		            // Content-Type:application/x-www-form-urlencoded
-                    // xhr.overrideMimeType( 'application/json' );
-                    start_time = new Date().getTime();
-                }
-            })
-            .done(function( data ) {
-
-                //if ( console && console.log ) {
-                //    console.log(data);
-                //    //return true;
-		        //}
-
-                $('#ticketform input[type=text], textarea').each(function (i,item) {
-                    //console.log(this);
-                    $(this).parent().parent().removeClass("has-error");
-                    $('span' ).remove();
-                });
-
-                $('#response').html(data.message + ' #' + data.ticket_id);
-                $('#response').removeClass().addClass("alert alert-success");
-
-                //$('#msg').append('<p>Success API : ' + JSON.stringify(data) + ' (in ' + request_time + 'ms.)</p>');
-                //$('#msg > p:last-child').removeClass().addClass("alert alert-success");
-                //return true;
-                // register the hash
-                lhash = fhash;
-
-                return true;
-            })
-            .fail(function( data ) {
-                var request_time = new Date().getTime() - start_time;
-                //$('#msg').append('<div>Failure API : ' + JSON.stringify(data.responseJSON) + ' (in ' + request_time + 'ms.) </div>');
-                //$('#msg > div:last-child').removeClass().addClass("alert alert-warning");
-                //if ( console && console.log ) {
-                    //console.log(data);
-                    //console.log( "error" );
-                //}
-
-                //var parsed = JSON.parse(JSON.stringify(data.responseJSON));
-                var parsed = data.responseJSON;
-                //var arr_data = $.map(parsed, function(el) { return el });
-                //console.log(arr_data);
-                //console.log(Object.keys(parsed));
-
-                $('#ticketform input[type=text], textarea').each(function (i,item) {
-                    //console.log(this);
-                    $(this).parent().parent().removeClass("has-error");
-                    $('span' ).remove();
-                });
-
-                //$('#ticketform input[type=text]').each(function (i,item)
-                $(Object.keys(parsed)).each(function (i,key) {
-                    //if ( console && console.log ) {
-                        //console.log(i);
-                        //console.log(key);
-                    //}
-                    // console.log(Object.keys(item));
-                    // var val = $(this).val();
-                    //console.log(val);
-                    //console.log(JSON.stringify(item[i]));
-                    var spanner='<span class="help-block"><strong>' + parsed[key][0] + '</strong></span>';
-                    $('#'+key).after(spanner);
-                    $('#'+key).parent().parent().addClass("has-error");
-                });
-
-            })
-            .always(function() {
-                $('body').css('cursor', 'default');
-                $("#ticketbutton").effect( 'pulsate', options, 500);
-
-                //$('#response').html('<p>Ticket : Submitted<p>');
-                //if ( console && console.log ) {
-                    //console.log( "finished" );
-                //}
-                return true;
-            });
-    });
 });

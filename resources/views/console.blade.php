@@ -34,6 +34,14 @@
     position: block;
 }
 
+.content > p:first-letter {
+    text-transform:capitalize;
+}
+
+.list-group {
+    margin-bottom: 7px;
+}
+
 #flash {
     padding-bottom: 1em;
 }
@@ -224,7 +232,6 @@ fieldset {
                 <div class="panel-heading">
                   Console
                 </div>
-
                 <!-- <div class="panel-body" id="map-wrap"> -->
                     <div class="panel-body pusher">
                         <div class="ui main container-fluid">
@@ -234,7 +241,7 @@ fieldset {
                                 <a id="pools" class="item " href="#/pools">Pools</a>
                                 <a id="clients" class="item " href="#/clients">Clients</a>
                                 <a id="servers" class="item " href="#/servers">Servers</a>
-                                <a id="conf" class="item " href="#/conf">Configuration</a>
+                                <a id="config" class="item " href="#/config">Config</a>
                                 <a id="current" class="item " href="#/current">Current</a>
                             </div>
                             <div id="mainview" class="ui pointing menu">
@@ -246,6 +253,21 @@ fieldset {
                     </div>
                 </div>
             <!-- </div> -->
+        </div>
+    </div>
+    <div class="col-sm-3 col-md-3 sidebar sidebar-left pull-left">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Breadcrumbs
+            </div>
+            <div class="panel-body">
+            <ol id="breadcrumb1" class="breadcrumb">
+                <li class="breadcrumb-item"><a href="console#/">Home</a></li>
+                <li class="breadcrumb-item"><a href="#">Servername</a></li>
+                <li class="breadcrumb-item active">Databases</li>
+            </ol>
+            </div>
+            </div>
         </div>
     </div>
     </div>

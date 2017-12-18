@@ -28,7 +28,7 @@ $api->version('v1', function ($api) {
         $api->get('status/clients', 'App\Api\V1\Controllers\PoolController@action');
         $api->get('status/servers', 'App\Api\V1\Controllers\PoolController@action');
         $api->get('status/config', 'App\Api\V1\Controllers\PoolController@action');
-        $api->get('status/lists', 'App\Api\V1\Controllers\PoolController@action');
+        $api->get('status/current', 'App\Api\V1\Controllers\PoolController@action');
         $api->get('status/version', 'App\Api\V1\Controllers\PoolController@action');
 
         $api->get('status/databases/{buid}', 'App\Api\V1\Controllers\PoolController@action');
@@ -37,7 +37,7 @@ $api->version('v1', function ($api) {
         $api->get('status/servers/{buid}', 'App\Api\V1\Controllers\PoolController@action');
         $api->get('status/clients/{buid}', 'App\Api\V1\Controllers\PoolController@action');
         $api->get('status/config/{buid}', 'App\Api\V1\Controllers\PoolController@action');
-        $api->get('status/lists/{buid}', 'App\Api\V1\Controllers\PoolController@action');
+        $api->get('status/current/{buid}', 'App\Api\V1\Controllers\PoolController@action');
     });
 
     // This route seems to throw an error inside, probably this format is not expected by a parser
