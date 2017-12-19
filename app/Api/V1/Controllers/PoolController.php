@@ -115,7 +115,7 @@ class PoolController extends Controller
         }
 
         if (!count($bouncers)) {
-            $resultsset = array('error' => '505', 'message' => sprintf('No bouncers found'));
+            $resultsset = array('error' => '505', 'message' => sprintf('No valid active bouncers found in database'));
             return response()->json($resultsset,500);
         }
 
