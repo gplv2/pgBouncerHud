@@ -12,6 +12,13 @@ It benefits from three packages:
 
 pgBouncerHud is a simple rest backend api over pgbouncers admin commands. Configuration of the bouncers is stored in a database.
 
+It will need a working DB backend, and a running memcached host
+
+Simple testing can be done by deploying the application with composer and then serving it with laravels: `php artisan serve` from 
+the repository's documentroot.
+
+For more permanent installations, you should look into using nginx + php-fpm
+
 
 # Screenshots
 
