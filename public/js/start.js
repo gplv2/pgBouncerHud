@@ -251,6 +251,13 @@ $( document ).ready(function() {
                     bouncerInSuccess(bouncers,section_id);
                 }
             });
+        }).fail(function(data) {
+            //console.log(data);
+            var request_time = new Date().getTime() - start_time;
+            $('#msg').html('Failure API : ' + JSON.stringify(data.responseJSON) + ' (in ' + request_time + 'ms.)');
+            $('#msg').removeClass().addClass("alert alert-warning");
+        }).always(function() {
+            $('body').css('cursor', 'default');
         });
     });
 
