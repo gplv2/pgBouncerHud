@@ -129,7 +129,7 @@ $( document ).ready(function() {
                     var pctsv= Math.round((totsv/all_sv)*100);
 
                     var cl_bar='<div class="progress"> <div class="progress-bar bg-success" role="progressbar" style="width: '+pctcl+'%;" aria-valuenow="'+pctcl+'" aria-valuemin="0" aria-valuemax="100">'+pctcl+'%</div> </div>';
-                    var sv_bar='<div class="progress"> <div class="progress-bar bg-success" role="progressbar" style="width: '+pctcl+'%;" aria-valuenow="'+pctcl+'" aria-valuemin="0" aria-valuemax="100">'+pctcl+'%</div> </div>';
+                    var sv_bar='<div class="progress"> <div class="progress-bar bg-success" role="progressbar" style="width: '+pctsv+'%;" aria-valuenow="'+pctsv+'" aria-valuemin="0" aria-valuemax="100">'+pctsv+'%</div> </div>';
 
                     $('#tbd_' + hash).append('<tr> <td>'+res.database+'</td> <td>'+res.user+'</td> <td>'+res.cl_active+'</td> <td>'+res.cl_waiting+'</td> <td>'+res.sv_active+'</td> <td>'+res.sv_idle+'</td> <td>'+res.sv_used+'</td> <td>'+res.sv_tested+'</td> <td>'+res.sv_login+'</td> <td>'+res.maxwait+'</td> <td>'+ cl_bar +'</td> <td>'+ sv_bar +'</td> </tr>');
                 }
