@@ -73,18 +73,59 @@ $( document ).ready(function() {
         }
 
         function bouncerInSuccess(bouncers,section_id) {
+            var all_cl=0;
+            var all_sv=0;
+            var all_avg_recv=0;
+
+            var all_tot_recv=0;
+            var all_tot_sent=0;
+
+            $.each(bouncers.results, function(i, mybouncer) {
+                //console.log(mybouncer);
+                if (mybouncer.cl_active) {
+                    all_cl+=mybouncer.cl_active;
+                }
+                if (mybouncer.sv_active) {
+                    all_sv+=mybouncer.sv_active;
+                }
+                if (mybouncer.avg_recv) {
+                    all_avg_recv+=mybouncer.avg_recv;
+                }
+                if (mybouncer.total_received) {
+                    all_tot_recv+=mybouncer.total_received;
+                }
+                if (mybouncer.total_sent) {
+                    all_tot_sent+=mybouncer.total_sent;
+                }
+            });
 
             function addOption( hash, res, bouncer ,section_id) {
                 if(section_id == 'databases') {
                     $('#tbd_' + hash).append('<tr> <td>'+bouncer.label+'</td> <td>'+res.host+'</td> <td>'+res.port+'</td> <td>'+res.database+'</td> <td>'+res.force_user+'</td> <td>'+res.pool_size+'</td> <td>'+res.reserve_pool+'</td> <td>'+res.pool_mode+'</td> <td>'+res.max_connections+'</td> <td>'+res.current_connections+'</td> </tr>');
                 }
                 if(section_id == 'stats') {
-                    $('#tbd_' + hash).append('<tr> <td>'+res.database+'</td> <td>'+res.total_requests+'</td> <td>'+res.total_received+'</td> <td>'+res.total_sent+'</td> <td>'+res.total_query_time+'</td> <td>'+res.avg_req+'</td> <td>'+res.avg_recv+'</td> <td>'+res.avg_sent+'</td> <td>'+res.avg_query+'</td></tr>');
+
+                    var avg_rec= Math.round((res.avg_recv/all_avg_recv)*100);
+                    var tot_data_load=Math.round((res.total_received+res.total_sent)/(all_tot_recv+all_tot_sent)*100);
+
+                    var avg_rec_bar='<div class="progress"> <div class="progress-bar bg-success" role="progressbar" style="width: '+avg_rec+'%;" aria-valuenow="'+avg_rec+'" aria-valuemin="0" aria-valuemax="100">'+avg_rec+'%</div> </div>';
+                    var tot_data_bar='<div class="progress"> <div class="progress-bar bg-success" role="progressbar" style="width: '+tot_data_load+'%;" aria-valuenow="'+tot_data_load+'" aria-valuemin="0" aria-valuemax="100">'+tot_data_load+'%</div> </div>';
+                    $('#tbd_' + hash).append('<tr> <td>'+res.database+'</td> <td>'+res.total_requests+'</td> <td>'+res.total_received+'</td> <td>'+res.total_sent+'</td> <td>'+res.total_query_time+'</td> <td>'+res.avg_req+'</td> <td>'+res.avg_recv+'</td> <td>'+res.avg_sent+'</td> <td>'+res.avg_query+'</td> <td>'+avg_rec_bar+'</td> <td>'+tot_data_bar+'</td> </tr>');
                 }
                 if(section_id == 'pools') {
-                    $('#tbd_' + hash).append('<tr> <td>'+res.database+'</td> <td>'+res.user+'</td> <td>'+res.cl_active+'</td> <td>'+res.cl_waiting+'</td> <td>'+res.sv_active+'</td> <td>'+res.sv_idle+'</td> <td>'+res.sv_used+'</td> <td>'+res.sv_tested+'</td> <td>'+res.sv_login+'</td> <td>'+res.maxwait+'</td> </tr>');
+                    var totcl = res.cl_active + res.cl_waiting;
+                    var totsv = res.sv_active + res.sv_waiting + res.sv_used + res.sv_tested;
+
+                    var pctcl= Math.round((totcl/all_cl)*100);
+                    var pctsv= Math.round((totsv/all_sv)*100);
+
+                    var cl_bar='<div class="progress"> <div class="progress-bar bg-success" role="progressbar" style="width: '+pctcl+'%;" aria-valuenow="'+pctcl+'" aria-valuemin="0" aria-valuemax="100">'+pctcl+'%</div> </div>';
+                    var sv_bar='<div class="progress"> <div class="progress-bar bg-success" role="progressbar" style="width: '+pctcl+'%;" aria-valuenow="'+pctcl+'" aria-valuemin="0" aria-valuemax="100">'+pctcl+'%</div> </div>';
+
+                    $('#tbd_' + hash).append('<tr> <td>'+res.database+'</td> <td>'+res.user+'</td> <td>'+res.cl_active+'</td> <td>'+res.cl_waiting+'</td> <td>'+res.sv_active+'</td> <td>'+res.sv_idle+'</td> <td>'+res.sv_used+'</td> <td>'+res.sv_tested+'</td> <td>'+res.sv_login+'</td> <td>'+res.maxwait+'</td> <td>'+ cl_bar +'</td> <td>'+ sv_bar +'</td> </tr>');
                 }
                 if(section_id == 'clients') {
+
                     $('#tbd_' + hash).append('<tr> <td>'+res.type+'</td> <td>'+res.state+'</td> <td>'+res.user+'</td> <td>'+res.database+'</td> <td>'+res.addr+'</td> <td>'+res.local_addr+'</td> <td>'+res.connect_time+'</td> <td>'+res.request_time+'</td><td>'+res.ptr+'</td> <td>'+res.link+'</td> <td>'+res.remote_pid+'</td> <td>'+res.tls+'</td> </tr>');
                 }
                 if(section_id == 'servers') {
@@ -114,7 +155,7 @@ $( document ).ready(function() {
 
             $('#cblist_'+bid).append('<div class="" id="widget_'+hash+'" data-name="'+hash+'">');
 
-            $('#widget_'+hash).append('<table id="tset_' + hash + '" class="table table-striped table-bordered table-condensed">');
+            $('#widget_'+hash).append('<table id="tset_' + hash + '" class="table-responsive table-striped table-bordered table-condensed">');
             $('#tset_'+hash).append('<thead id="tha_' + hash + '"/>');
             $('#tset_'+hash).append('<tbody id="tbd_' + hash + '"/>');
 
@@ -122,16 +163,16 @@ $( document ).ready(function() {
                 $('#tha_'+hash).append('<tr> <th>Name</th> <th>Host</th> <th>Port</th> <th>Database</th> <th>Force User</th> <th>Pool Size</th> <th>Reserve Pool</th> <th>Pool Mode</th> <th>Max Connections</th> <th>Current Connections</th></tr>');
             }
             if(section_id == 'stats') {
-                $('#tha_'+hash).append('<tr> <th>Database</th> <th>Total requests</th> <th>Total received</th> <th>Total Sent</th> <th>Total query time</th> <th>Avg Req</th> <th>Avg Recv</th> <th>Avg Sent</th> <th>Avg Query</th></tr>');
+                $('#tha_'+hash).append('<tr> <th>Database</th> <th>Total req</th> <th>Tot recv</th> <th>Tot Sent</th> <th>Total qry time</th> <th>Avg Req</th> <th>Avg Recv</th> <th>Avg Sent</th> <th>Avg Query</th> <th>Avg load</th> <<th>Data load</th>/tr>');
             }
             if(section_id == 'pools') {
-                $('#tha_'+hash).append('<tr> <th>Database</th> <th>User</th> <th>Cl Active</th> <th>Cl Waiting</th> <th>Sv Active</th> <th>Sv Idle</th> <th>Sv Used</th> <th>Sv Tested</th> <th>Sv Login</th> <th>MaxWait</th> </tr>');
+                $('#tha_'+hash).append('<tr> <th>Database</th> <th>User</th> <th>Cl Active</th> <th>Cl Waiting</th> <th>Sv Active</th> <th>Sv Idle</th> <th>Sv Used</th> <th>Sv Tested</th> <th>Sv Login</th> <th>MaxWait</th> <th>Client load</th> <th>Server load</th> </tr>');
             }
             if(section_id == 'clients') {
-                $('#tha_'+hash).append('<tr> <th>Type</th> <th>State</th> <th>User</th> <th>Database</th> <th>Source</th> <th>Destination</th> <th>Connect time</th> <th>Request time</th> <th>Ptr</th> <th>Link</th> <th>Remote PID</th> <th>TLS</th> </tr>');
+                $('#tha_'+hash).append('<tr> <th>Type</th> <th>State</th> <th>User</th> <th>Database</th> <th>Source</th> <th>Destination</th> <th>Connect time</th> <th>Request time</th> <th>Ptr</th> <th>Link</th> <th>PID</th> <th>TLS</th> </tr>');
             }
             if(section_id == 'servers') {
-                $('#tha_'+hash).append('<tr> <th>Type</th> <th>State</th> <th>User</th> <th>Database</th> <th>Source</th> <th>Destination</th> <th>Connect time</th> <th>Request time</th> <th>Ptr</th> <th>Link</th> <th>Remote PID</th> <th>TLS</th> </tr>');
+                $('#tha_'+hash).append('<tr> <th>Type</th> <th>State</th> <th>User</th> <th>Database</th> <th>Source</th> <th>Destination</th> <th>Connect time</th> <th>Request time</th> <th>Ptr</th> <th>Link</th> <th>PID</th> <th>TLS</th> </tr>');
             }
             if(section_id == 'config') {
                 $('#tha_'+hash).append('<tr> <th>Key</th> <th>Value</th> <th>Changeable</th> </tr>');
@@ -172,7 +213,7 @@ $( document ).ready(function() {
             $('body').css('cursor', 'default');
             $('#msg').html('Found ' + Object.keys(data).length + ' results');
             $('#msg').removeClass().addClass("alert alert-info");
-            console.log(data);
+            //console.log(data);
             var request_time = new Date().getTime() - start_time;
             if ( console && console.log ) {
                 console.log( data );

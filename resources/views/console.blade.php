@@ -206,6 +206,10 @@ fieldset {
     cursor: inherit;
     display: block;
 }
+.btn-group {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
 
 .input-file { position: relative; margin: 60px 60px 0 } /* Remove margin, it is just for stackoverflow viewing */
 .input-file .input-group-addon { border: 0px; padding: 0px; }
@@ -227,11 +231,11 @@ fieldset {
 <div class="container-fluid">
   <div class="row-fluid">
     <!--Sidebar content-->
-    <div class="col-sm-3 col-md-3 sidebar sidebar-left pull-left">
+    <div class="col-sm-2 col-md-2 sidebar sidebar-left pull-left">
       <!--Injected angular content-->
             <div class="panel panel-default" ng-view=""></div>
     </div>
-    <div class="col-sm-9 col-md-9 sidebar sidebar-left pull-right">
+    <div class="col-sm-10 col-md-10 sidebar sidebar-left pull-right">
       <!--Body content-->
             <div class="panel panel-default">
                 <div class="panel-heading">
