@@ -15,8 +15,6 @@ pgBouncerHud is a simple rest backend api over pgbouncers admin commands. Config
 
 # Screenshots
 
-https://raw.githubusercontent.com/gplv2/pgBouncerHud/master/database/factories/ModelFactory.php
-
 ## login
 ![hud log](https://raw.githubusercontent.com/gplv2/pgBouncerHud/master/docs/pghudlogin.png)
 
