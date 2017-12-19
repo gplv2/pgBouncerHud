@@ -50,6 +50,10 @@ $( document ).ready(function() {
 
     $( "#databases, #stats, #pools, #clients, #servers, #config, #current" ).click(function( event ) {
         event.preventDefault();
+        $('#bouncerbuttons').children().removeClass('active');
+
+        $(this).addClass('active');
+
         $('#msg').removeClass().empty();
         var section_id=this.id;
 
@@ -110,7 +114,7 @@ $( document ).ready(function() {
 
             $('#cblist_'+bid).append('<div class="" id="widget_'+hash+'" data-name="'+hash+'">');
 
-            $('#widget_'+hash).append('<table id="tset_' + hash + '" class="table table-striped table-bordered">');
+            $('#widget_'+hash).append('<table id="tset_' + hash + '" class="table table-striped table-bordered table-condensed">');
             $('#tset_'+hash).append('<thead id="tha_' + hash + '"/>');
             $('#tset_'+hash).append('<tbody id="tbd_' + hash + '"/>');
 

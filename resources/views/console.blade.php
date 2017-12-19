@@ -240,17 +240,17 @@ fieldset {
                 <!-- <div class="panel-body" id="map-wrap"> -->
                     <div class="panel-body pusher">
                         <div class="ui main container-fluid">
-                            <div class="row-fluid" id="flash">
-                                <a id="databases" class="item " href="#/databases">Databases</a>
-                                <a id="stats" class="item " href="#/stats">Stats</a>
-                                <a id="pools" class="item " href="#/pools">Pools</a>
-                                <a id="clients" class="item " href="#/clients">Clients</a>
-                                <a id="servers" class="item " href="#/servers">Servers</a>
-                                <a id="config" class="item " href="#/config">Config</a>
-                                <a id="current" class="item " href="#/current">Current</a>
+                            <div class="row-fluid" >
+                            <div id="bouncerbuttons" class="btn-group" role="group" aria-label="Bouncer function buttons">
+                                <button type="button" id="databases" class="btn btn-default btn-lg" href="#/databases">Databases</button>
+                                <button type="button" id="stats" class="btn btn-default btn-lg" href="#/stats">Stats</button>
+                                <button type="button" id="pools" class="btn btn-default btn-lg" href="#/pools">Pools</button>
+                                <button type="button" id="clients" class="btn btn-default btn-lg" href="#/clients">Clients</button>
+                                <button type="button" id="servers" class="btn btn-default btn-lg" href="#/servers">Servers</button>
+                                <button type="button" id="config" class="btn btn-default btn-lg" href="#/config">Config</button>
+                                <button type="button" id="current" class="btn btn-default btn-lg" href="#/current">Current</button>
                             </div>
                             <div id="mainview" class="ui pointing menu">
-                                <div class="header item">bouncer &gt; role</div>
                             </div>
                         </div>
                     <div class="panel-footer">
