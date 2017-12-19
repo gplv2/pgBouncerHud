@@ -269,7 +269,7 @@ Alternatively you can choose to let nginx take care of cors handlings
 
 To test the performance and stability of the API we can use ab to stress it. From the command line , do this.  Make sure to create the file text.json with correct request data
 
-    ab -l -r -n 1000 -c 20 -k -p text.json -H "Accept-Encoding: gzip, deflate" -H "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOjEsImlzcyI6Imh0dHBzOlwvXC90ZXN0LmRldnRlc3Rpbmcucm9ja3NcL2FwaVwvYXV0aFwvc2lnbnVwIiwiaWF0IjoxNDc1MzI2MDk0LCJleHAiOjE3MzQ1MjYwOTQsIm5iZiI6MTQ3NTMyNjA5NCwianRpIjoiMjU1ODIzYzllMGRhMmU0NjUyZTg5MTc4NDFlZDNhOWIifQ.o2Oa_EMkcmi3g6KpjegfX3DXpwgVF3moTCd3Bvz2T1M" -T application/json  https://test.devtesting.rocks/api/recommendations
+    ab -l -r -n 1000 -c 20 -k -p text.json -H "Accept-Encoding: gzip, deflate" -H "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOjEsImlzcyI6Imh0dHBzOlwvXC90ZXN0LmRldnRlc3Rpbmcucm9ja3NcL2FwaVwvYXV0aFwvc2lnbnVwIiwiaWF0IjoxNDc1MzI2MDk0LCJleHAiOjE3MzQ1MjYwOTQsIm5iZiI6MTQ3NTMyNjA5NCwianRpIjoiMjU1ODIzYzllMGRhMmU0NjUyZTg5MTc4NDFlZDNhOWIifQ.o2Oa_EMkcmi3g6KpjegfX3DXpwgVF3moTCd3Bvz2T1M" -T application/json  https://test.devtesting.rocks/api/databases
 
 The file text.json can be found in the 'tests' dir
 
