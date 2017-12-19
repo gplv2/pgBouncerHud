@@ -80,8 +80,11 @@ $( document ).ready(function() {
             var all_tot_recv=0;
             var all_tot_sent=0;
 
+            var all_cur_con=0;
+
+            console.log(bouncers.results);
+
             $.each(bouncers.results, function(i, mybouncer) {
-                //console.log(mybouncer);
                 if (mybouncer.cl_active) {
                     all_cl+=mybouncer.cl_active;
                 }
@@ -94,6 +97,9 @@ $( document ).ready(function() {
                 if (mybouncer.total_received) {
                     all_tot_recv+=mybouncer.total_received;
                 }
+                if (mybouncer.current_connections) {
+                    all_cur_con+=mybouncer.current_connections;
+                }
                 if (mybouncer.total_sent) {
                     all_tot_sent+=mybouncer.total_sent;
                 }
@@ -101,7 +107,10 @@ $( document ).ready(function() {
 
             function addOption( hash, res, bouncer ,section_id) {
                 if(section_id == 'databases') {
-                    $('#tbd_' + hash).append('<tr> <td>'+bouncer.label+'</td> <td>'+res.host+'</td> <td>'+res.port+'</td> <td>'+res.database+'</td> <td>'+res.force_user+'</td> <td>'+res.pool_size+'</td> <td>'+res.reserve_pool+'</td> <td>'+res.pool_mode+'</td> <td>'+res.max_connections+'</td> <td>'+res.current_connections+'</td> </tr>');
+                    var tot_cur_con=Math.round((res.current_connections/all_cur_con)*100);
+                    var tot_cur_bar='<div class="progress"> <div class="progress-bar bg-success" role="progressbar" style="width: '+tot_cur_con+'%;" aria-valuenow="'+tot_cur_con+'" aria-valuemin="0" aria-valuemax="100">'+tot_cur_con+'%</div> </div>';
+                    //console.log(res);
+                    $('#tbd_' + hash).append('<tr> <td>'+bouncer.label+'</td> <td>'+res.host+'</td> <td>'+res.port+'</td> <td>'+res.database+'</td> <td>'+res.force_user+'</td> <td>'+res.pool_size+'</td> <td>'+res.reserve_pool+'</td> <td>'+res.pool_mode+'</td> <td>'+res.max_connections+'</td> <td>'+res.current_connections+'</td> <td>'+tot_cur_bar+'</td> </tr>');
                 }
                 if(section_id == 'stats') {
 
@@ -160,7 +169,7 @@ $( document ).ready(function() {
             $('#tset_'+hash).append('<tbody id="tbd_' + hash + '"/>');
 
             if(section_id == 'databases') {
-                $('#tha_'+hash).append('<tr> <th>Name</th> <th>Host</th> <th>Port</th> <th>Database</th> <th>Force User</th> <th>Pool Size</th> <th>Reserve Pool</th> <th>Pool Mode</th> <th>Max Connections</th> <th>Current Connections</th></tr>');
+                $('#tha_'+hash).append('<tr> <th>Name</th> <th>Host</th> <th>Port</th> <th>Database</th> <th>Force User</th> <th>Pool Size</th> <th>Reserve Pool</th> <th>Pool Mode</th> <th>Max Conn</th> <th>Current Conn</th> <th>% Current Conn </th></tr>');
             }
             if(section_id == 'stats') {
                 $('#tha_'+hash).append('<tr> <th>Database</th> <th>Total req</th> <th>Tot recv</th> <th>Tot Sent</th> <th>Total qry time</th> <th>Avg Req</th> <th>Avg Recv</th> <th>Avg Sent</th> <th>Avg Query</th> <th>Avg load</th> <<th>Data load</th>/tr>');
