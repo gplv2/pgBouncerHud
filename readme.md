@@ -20,11 +20,15 @@ https://raw.githubusercontent.com/gplv2/pgBouncerHud/master/database/factories/M
 ## login
 ![hud log](https://raw.githubusercontent.com/gplv2/pgBouncerHud/master/docs/pghudlogin.png)
 
-## blah 1
+## Stats overview
 ![hud ss1](https://raw.githubusercontent.com/gplv2/pgBouncerHud/master/docs/pghud1.png)
 
-## blah 2
+`SHOW STATS` in pgbouncer
+
+## Config overview
 ![hud ss2](https://raw.githubusercontent.com/gplv2/pgBouncerHud/master/docs/pghud2.png)
+
+`SHOW CONFIGURATION` in pgbouncer
 
 
 ## Installation
