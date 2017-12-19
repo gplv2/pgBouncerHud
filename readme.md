@@ -10,6 +10,23 @@ It benefits from three packages:
 
 # Documentation
 
+pgBouncerHud is a simple rest backend api over pgbouncers admin commands. Configuration of the bouncers is stored in a database.
+
+
+# Screenshots
+
+https://raw.githubusercontent.com/gplv2/pgBouncerHud/master/database/factories/ModelFactory.php
+
+## login
+![hud log](https://raw.githubusercontent.com/gplv2/pgBouncerHud/master/docs/pghudlogin.png)
+
+## blah 1
+![hud ss1](https://raw.githubusercontent.com/gplv2/pgBouncerHud/master/docs/pghud1.png)
+
+## blah 2
+![hud ss2](https://raw.githubusercontent.com/gplv2/pgBouncerHud/master/docs/pghud2.png)
+
+
 ## Installation
 
 ### Install composer
