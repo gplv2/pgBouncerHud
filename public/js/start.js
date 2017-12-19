@@ -75,6 +75,7 @@ $( document ).ready(function() {
         function bouncerInSuccess(bouncers,section_id) {
             var all_cl=0;
             var all_sv=0;
+
             var all_avg_recv=0;
 
             var all_tot_recv=0;
@@ -82,36 +83,40 @@ $( document ).ready(function() {
 
             var all_cur_con=0;
 
-            console.log(bouncers.results);
+            //console.log(bouncers.results);
 
             $.each(bouncers.results, function(i, mybouncer) {
-                if (mybouncer.cl_active) {
+                if (mybouncer.cl_active != null) {
                     all_cl+=mybouncer.cl_active;
                 }
-                if (mybouncer.sv_active) {
-                    all_sv+=mybouncer.sv_active;
+                    //console.log(mybouncer.sv_active);
+                if (mybouncer.sv_active != null && mybouncer.sv_idle != null && mybouncer.sv_used != null && mybouncer.sv_tested != null && mybouncer.sv_login != null ) {
+                    all_sv+= mybouncer.sv_active + mybouncer.sv_idle + mybouncer.sv_used + mybouncer.sv_tested + mybouncer.sv_login;
+                    //console.log(all_sv);
                 }
-                if (mybouncer.avg_recv) {
+                if (mybouncer.avg_recv != null) {
                     all_avg_recv+=mybouncer.avg_recv;
                 }
-                if (mybouncer.total_received) {
+                if (mybouncer.total_received != null) {
                     all_tot_recv+=mybouncer.total_received;
                 }
-                if (mybouncer.current_connections) {
+                if (mybouncer.current_connections != null) {
                     all_cur_con+=mybouncer.current_connections;
                 }
-                if (mybouncer.total_sent) {
+                if (mybouncer.total_sent != null) {
                     all_tot_sent+=mybouncer.total_sent;
                 }
             });
 
             function addOption( hash, res, bouncer ,section_id) {
+                // SHOW DATABASES
                 if(section_id == 'databases') {
                     var tot_cur_con=Math.round((res.current_connections/all_cur_con)*100);
                     var tot_cur_bar='<div class="progress"> <div class="progress-bar bg-success" role="progressbar" style="width: '+tot_cur_con+'%;" aria-valuenow="'+tot_cur_con+'" aria-valuemin="0" aria-valuemax="100">'+tot_cur_con+'%</div> </div>';
                     //console.log(res);
                     $('#tbd_' + hash).append('<tr> <td>'+bouncer.label+'</td> <td>'+res.host+'</td> <td>'+res.port+'</td> <td>'+res.database+'</td> <td>'+res.force_user+'</td> <td>'+res.pool_size+'</td> <td>'+res.reserve_pool+'</td> <td>'+res.pool_mode+'</td> <td>'+res.max_connections+'</td> <td>'+res.current_connections+'</td> <td>'+tot_cur_bar+'</td> </tr>');
                 }
+                // SHOW STATS
                 if(section_id == 'stats') {
 
                     var avg_rec= Math.round((res.avg_recv/all_avg_recv)*100);
@@ -121,9 +126,13 @@ $( document ).ready(function() {
                     var tot_data_bar='<div class="progress"> <div class="progress-bar bg-success" role="progressbar" style="width: '+tot_data_load+'%;" aria-valuenow="'+tot_data_load+'" aria-valuemin="0" aria-valuemax="100">'+tot_data_load+'%</div> </div>';
                     $('#tbd_' + hash).append('<tr> <td>'+res.database+'</td> <td>'+res.total_requests+'</td> <td>'+res.total_received+'</td> <td>'+res.total_sent+'</td> <td>'+res.total_query_time+'</td> <td>'+res.avg_req+'</td> <td>'+res.avg_recv+'</td> <td>'+res.avg_sent+'</td> <td>'+res.avg_query+'</td> <td>'+avg_rec_bar+'</td> <td>'+tot_data_bar+'</td> </tr>');
                 }
+                // SHOW POOLS
                 if(section_id == 'pools') {
                     var totcl = res.cl_active + res.cl_waiting;
-                    var totsv = res.sv_active + res.sv_waiting + res.sv_used + res.sv_tested;
+                    if (res.sv_active != null && res.sv_idle != null && res.sv_used != null && res.sv_tested != null && res.sv_login!= null ) {
+                        var totsv = res.sv_active + res.sv_idle + res.sv_used + res.sv_tested + res.sv_login;
+                        //console.log(totsv);
+                    }
 
                     var pctcl= Math.round((totcl/all_cl)*100);
                     var pctsv= Math.round((totsv/all_sv)*100);
@@ -133,16 +142,20 @@ $( document ).ready(function() {
 
                     $('#tbd_' + hash).append('<tr> <td>'+res.database+'</td> <td>'+res.user+'</td> <td>'+res.cl_active+'</td> <td>'+res.cl_waiting+'</td> <td>'+res.sv_active+'</td> <td>'+res.sv_idle+'</td> <td>'+res.sv_used+'</td> <td>'+res.sv_tested+'</td> <td>'+res.sv_login+'</td> <td>'+res.maxwait+'</td> <td>'+ cl_bar +'</td> <td>'+ sv_bar +'</td> </tr>');
                 }
+                // SHOW CLIENTS
                 if(section_id == 'clients') {
 
                     $('#tbd_' + hash).append('<tr> <td>'+res.type+'</td> <td>'+res.state+'</td> <td>'+res.user+'</td> <td>'+res.database+'</td> <td>'+res.addr+'</td> <td>'+res.local_addr+'</td> <td>'+res.connect_time+'</td> <td>'+res.request_time+'</td><td>'+res.ptr+'</td> <td>'+res.link+'</td> <td>'+res.remote_pid+'</td> <td>'+res.tls+'</td> </tr>');
                 }
+                // SHOW SERVERS
                 if(section_id == 'servers') {
                     $('#tbd_' + hash).append('<tr> <td>'+res.type+'</td> <td>'+res.state+'</td> <td>'+res.user+'</td> <td>'+res.database+'</td> <td>'+res.addr+'</td> <td>'+res.local_addr+'</td> <td>'+res.connect_time+'</td> <td>'+res.request_time+'</td><td>'+res.ptr+'</td> <td>'+res.link+'</td> <td>'+res.remote_pid+'</td> <td>'+res.tls+'</td> </tr>');
                 }
+                // SHOW CONFIG
                 if(section_id == 'config') {
                     $('#tbd_' + hash).append('<tr> <td>'+res.key+'</td> <td>'+res.value+'</td> <td>'+res.changeable+'</td> </tr>');
                 }
+                // SHOW CURRENT
                 if(section_id == 'current') {
                     $('#tbd_' + hash).append('<tr> <td>'+res.list+'</td> <td>'+res.items+'</td> </tr>');
                 }
