@@ -263,7 +263,7 @@
 
 				<p class="footer-company-about">
 					<span>About the software</span>
-				    This is used to get an overview of many pgbouncers , find pgbouncerhud on github !
+				    This is used to get an overview of many pgbouncers , find pgbouncerhud on <a class="github" href="https://github.com/gplv2/pgBouncerHud">Github</a> !
 				</p>
 			</div>
 		</footer>
