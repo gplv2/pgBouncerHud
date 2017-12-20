@@ -234,7 +234,33 @@ fieldset {
     <div class="col-sm-2 col-md-2 sidebar sidebar-left pull-left">
       <!--Injected angular content-->
             <div class="panel panel-default" ng-view=""></div>
+    <!-- Options -->
+    <div class="panel panel-default">
+        <div class="panel-heading" data-toggle="collapse" data-target="#generalopts">
+            Options
+        </div>
+        <div id="generalopts" class="panel-body collapse">
+            <form id="genform" class="form-horizontal" role="form">
+                <div class="form-group">
+                    <label for="userid" class="col-md-2 control-label">UserID</label>
+
+                    <div class="col-md-4">
+                        <input type="number" class="form-control" id="userid" placeholder="Numeric id : 1234" value="111">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="requestid" class="col-md-2 control-label">RequestID</label>
+
+                    <div class="col-md-4">
+                        <input type="text" class="form-control" id="requestid" placeholder="Your request ref." value="666">
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
+
+    </div>
+
     <div class="col-sm-10 col-md-10 sidebar sidebar-left pull-right">
       <!--Body content-->
             <div class="panel panel-default">
