@@ -82,7 +82,7 @@ class ClusterTableSeeder extends Seeder {
     public function run() {
         $clusters = array(
             array("cluster_id"=> 10,"label"=>"First test cluster", "description"=>"Primary bouncer cluster", "enabled"=>true),
-            array("cluster_id"=> 10,"label"=>"Second test cluster", "description"=>"Secondary bouncer cluster", "enabled"=>false),
+            array("cluster_id"=> 11,"label"=>"Second test cluster", "description"=>"Secondary bouncer cluster", "enabled"=>false),
         );
 
         DB::table('clusters')->delete();
@@ -103,6 +103,6 @@ class MemberTableSeeder extends Seeder {
         );
 
         DB::table('members')->delete();
-        DB::table('members')->insert($cluster_memberss);
+        DB::table('members')->insert($cluster_members);
     }
 }
