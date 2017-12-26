@@ -22,18 +22,6 @@ class DatabaseSeeder extends Seeder
         0 "," Default | 2017-12-19 15:29:51 | 2017-12-19 15:29:55
          */
 
-        if(Schema::hasTable('categories')) {
-            DB::table('categories')->delete();
-        }
-
-        $this->command->info('Seeding Categories');
-        DB::table('categories')->insert(array(
-            array( 'id'=>0, 'name' => 'Default' ),
-            array( 'id'=>1, 'name' => 'Single' ),
-            array( 'id'=>2, 'name' => 'Master' ),
-            array( 'id'=>3, 'name' => 'Slave' ),
-            array( 'id'=>4, 'name' => 'VIP' ))
-        );
         $this->command->info('Seeding Bouncers');
         $this->call('BouncerTableSeeder');
 
@@ -73,6 +61,19 @@ class BouncerTableSeeder extends Seeder {
 
         if(Schema::hasTable('bouncers')) {
             DB::table('bouncers')->delete();
+
+            if(Schema::hasTable('categories')) {
+                DB::table('categories')->delete();
+
+                $this->command->info('Seeding Categories');
+                DB::table('categories')->insert(array(
+                            array( 'id'=>0, 'name' => 'Default' ),
+                            array( 'id'=>1, 'name' => 'Single' ),
+                            array( 'id'=>2, 'name' => 'Master' ),
+                            array( 'id'=>3, 'name' => 'Slave' ),
+                            array( 'id'=>4, 'name' => 'VIP' ))
+                        );
+            }
             DB::table('bouncers')->insert($bball);
         }
 
