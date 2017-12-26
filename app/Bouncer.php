@@ -22,4 +22,9 @@ class Bouncer extends Model
      */
     protected $hidden = [
     ];
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
 }
