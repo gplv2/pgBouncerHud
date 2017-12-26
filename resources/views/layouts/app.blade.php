@@ -217,6 +217,7 @@
                 <span class="icon-bar"></span>
             </button>
         <a class="navbar-brand{{ (Request::is('console') ? ' active' : '')}}" href="{{ url('/console') }}#/"> Console </a>
+        <a class="navbar-brand{{ (Request::is('config') ? ' active' : '')}}" href="{{ url('/config') }}#/"> Config </a>
         <a class="navbar-brand{{ (Request::is('about') ? ' active' : '')}}" href="{{ url('/about') }}#/"> About </a>
         </div>
             <div class="navbar-collapse collapse">

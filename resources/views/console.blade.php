@@ -242,17 +242,17 @@ fieldset {
         <div id="generalopts" class="panel-body collapse">
             <form id="genform" class="form-horizontal" role="form">
                 <div class="form-group">
-                    <label for="userid" class="col-md-2 control-label">UserID</label>
+                    <label for="userid" class="col-md-0 control-label">UserID</label>
 
-                    <div class="col-md-4">
-                        <input type="number" class="form-control" id="userid" placeholder="Numeric id : 1234" value="111">
+                    <div class="col-md-6">
+                        <input type="number" class="form-control" id="userid" placeholder="Numeric id : 1234" value="12345">
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="requestid" class="col-md-2 control-label">RequestID</label>
+                    <label for="requestid" class="col-md-0 control-label">RequestID</label>
 
-                    <div class="col-md-4">
-                        <input type="text" class="form-control" id="requestid" placeholder="Your request ref." value="666">
+                    <div class="col-md-6">
+                        <input type="text" class="form-control" id="requestid" placeholder="Your request ref." value="12345">
                     </div>
                 </div>
             </form>

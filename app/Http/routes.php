@@ -22,6 +22,7 @@ Route::get('/', function () {
 */
 
 Route::resource('console', 'ConsoleController@showConsole');
+Route::resource('config',  'ConsoleController@showConfig');
 Route::resource('restricted', 'ConsoleController@showConsole');
 
 Route::resource('about', 'ConsoleController@showAbout', ['only' => [

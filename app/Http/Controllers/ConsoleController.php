@@ -18,6 +18,11 @@ class ConsoleController extends Controller
         return view('console');
     }
 
+    public function showConfig()
+    {
+        return view('config');
+    }
+
     public function showAbout()
     {
         return view('about');
