@@ -116,13 +116,13 @@ class ClusterController extends Controller
 
         /*
         Slack::to('@gplv2')->attach([
-            'fallback' => 'Bouncer notification',
+            'fallback' => 'notification',
             'text' => $cluster->title,
             'color' => $color
         ])->attach($attachment)->send($template); // no message, but can be provided if you'd like
          */
 
-        $reply =  array('status' => $cluster->status, 'id' => $cluster->id, 'message' => 'Bouncer has been added to the configuration.');
+        $reply =  array('status' => $cluster->status, 'id' => $cluster->id, 'message' => 'Cluster has been added to the configuration.');
 
         return response()->json($reply,201);
     }
