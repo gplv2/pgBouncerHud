@@ -14,7 +14,7 @@ class CreateClustersTable extends Migration
     {
         Schema::create('clusters', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('cluster_id')->unsigned();
+            $table->integer('cluster_id')->unsigned()->unique();
             $table->string('label')->unique();
             $table->string('description');
             $table->timestamps();
@@ -28,6 +28,6 @@ class CreateClustersTable extends Migration
      */
     public function down()
     {
-        Schema::drop('clusters');
+        Schema::dropIfExists('clusters');
     }
 }

@@ -14,9 +14,11 @@ class CreateMembersTable extends Migration
     {
         Schema::create('members', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('cluster_id')->unsigned()->nullable($value = false);
+            $table->integer('cluster_id')->unsigned()->unique();
             $table->integer('bouncer_id')->unsigned()->nullable($value = false);
             $table->timestamps();
+
+            $table->foreign('cluster_id')->references('cluster_id')->on('clusters');
         });
     }
 
@@ -27,6 +29,6 @@ class CreateMembersTable extends Migration
      */
     public function down()
     {
-        Schema::drop('members');
+        Schema::dropIfExists('members');
     }
 }

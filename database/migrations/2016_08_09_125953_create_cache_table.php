@@ -26,6 +26,6 @@ class CreateCacheTable extends Migration
      */
     public function down()
     {
-        Schema::drop('cache');
+        Schema::dropIfExists('cache');
     }
 }
