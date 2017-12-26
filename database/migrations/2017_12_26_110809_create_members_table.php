@@ -14,11 +14,12 @@ class CreateMembersTable extends Migration
     {
         Schema::create('members', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('cluster_id')->unsigned()->unique();
+            $table->integer('cluster_id')->unsigned()->nullable($value = false);
             $table->integer('bouncer_id')->unsigned()->nullable($value = false);
             $table->timestamps();
 
             $table->foreign('cluster_id')->references('cluster_id')->on('clusters');
+            $table->foreign('bouncer_id')->references('bouncer_id')->on('bouncers');
         });
     }
 
