@@ -20,6 +20,9 @@ $api->version('v1', function ($api) {
         $api->resources([
             'bouncers' => 'App\Api\V1\Controllers\BouncerController',
         ]);
+        $api->resources([
+            'clusters' => 'App\Api\V1\Controllers\ClusterController',
+        ]);
 
         // $api->get('status/{buid}', 'App\Api\V1\Controllers\PoolController@status');
         $api->get('status/databases', 'App\Api\V1\Controllers\PoolController@action');
