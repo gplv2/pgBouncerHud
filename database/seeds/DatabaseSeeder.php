@@ -21,7 +21,11 @@ class DatabaseSeeder extends Seeder
         5 "," Slave   | 2017-12-19 15:29:51 | 2017-12-19 15:29:55
         0 "," Default | 2017-12-19 15:29:51 | 2017-12-19 15:29:55
          */
-        DB::table('categories')->delete();
+
+        if(Schema::hasTable('categories')) {
+            DB::table('categories')->delete();
+        }
+
         $this->command->info('Seeding Categories');
         DB::table('categories')->insert(array(
             array( 'id'=>0, 'name' => 'Default' ),
@@ -67,8 +71,10 @@ class BouncerTableSeeder extends Seeder {
             array("bouncer_id"=> 16,"label"=>"bouncer-ppc-arts-sta", "category_id"=>0 ,"dsn"=>"postgresql://pghud:OVBx0iyJIM6qE@192.168.22.231:5432/pgbouncer","priority"=>0 ,"tag"=> "sta","description"=>"Arts PPC staging", "enabled"=>true)
         );
 
-        DB::table('bouncers')->delete();
-        DB::table('bouncers')->insert($bball);
+        if(Schema::hasTable('bouncers')) {
+            DB::table('bouncers')->delete();
+            DB::table('bouncers')->insert($bball);
+        }
 
     }
 }
@@ -81,12 +87,14 @@ class ClusterTableSeeder extends Seeder {
      */
     public function run() {
         $clusters = array(
-            array("cluster_id"=> 10,"label"=>"First test cluster", "description"=>"Primary bouncer cluster", "enabled"=>true),
-            array("cluster_id"=> 11,"label"=>"Second test cluster", "description"=>"Secondary bouncer cluster", "enabled"=>false),
-        );
+                array("cluster_id"=> 10,"label"=>"First test cluster", "description"=>"Primary bouncer cluster", "enabled"=>true),
+                array("cluster_id"=> 11,"label"=>"Second test cluster", "description"=>"Secondary bouncer cluster", "enabled"=>false),
+                );
 
-        DB::table('clusters')->delete();
-        DB::table('clusters')->insert($clusters);
+        if(Schema::hasTable('clusters')) {
+            DB::table('clusters')->delete();
+            DB::table('clusters')->insert($clusters);
+        }
     }
 }
 
@@ -98,11 +106,13 @@ class MemberTableSeeder extends Seeder {
      */
     public function run() {
         $cluster_members = array(
-            array("cluster_id"=> 10,"bouncer_id" => 9),
-            array("cluster_id"=> 10,"bouncer_id" => 10)
-        );
+                array("cluster_id"=> 10,"bouncer_id" => 9),
+                array("cluster_id"=> 10,"bouncer_id" => 10)
+                );
 
-        DB::table('members')->delete();
-        DB::table('members')->insert($cluster_members);
+        if(Schema::hasTable('members')) {
+            DB::table('members')->delete();
+            DB::table('members')->insert($cluster_members);
+        }
     }
 }
