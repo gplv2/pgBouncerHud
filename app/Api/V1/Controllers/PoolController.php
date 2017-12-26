@@ -70,7 +70,7 @@ class PoolController extends Controller
         $response->header('charset', 'utf-8');
 
         $categories = Category::all();
-        $bouncers = Bouncer::all();
+        $bouncers = Bouncer::all()->orderBy('enabled', 'tag', 'priority');
 
         return response()->json(compact('bouncers', 'category'),200);
     }
@@ -109,9 +109,9 @@ class PoolController extends Controller
         $response->header('charset', 'utf-8');
 
         if (!empty($buid)){
-            $bouncers = Bouncer::where([ ['id', '=', $buid], ['enabled', '=', 'true' ] ])->get();
+            $bouncers = Bouncer::where([ ['id', '=', $buid], ['enabled', '=', 'true' ] ])->orderBy('enabled', 'tag', 'priority')->get();
         } else {
-            $bouncers = Bouncer::where('enabled', '=', 'true')->get();
+            $bouncers = Bouncer::where('enabled', '=', 'true')->orderBy('enabled', 'tag', 'priority')->get();
         }
 
         if (!count($bouncers)) {
