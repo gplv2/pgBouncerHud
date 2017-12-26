@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
         4 "," Master  | 2017-12-19 15:29:51 | 2017-12-19 15:29:55
         5 "," Slave   | 2017-12-19 15:29:51 | 2017-12-19 15:29:55
         0 "," Default | 2017-12-19 15:29:51 | 2017-12-19 15:29:55
-        */
+         */
         DB::table('categories')->delete();
         $this->command->info('Seeding Categories');
         DB::table('categories')->insert(array(
@@ -32,6 +32,12 @@ class DatabaseSeeder extends Seeder
         );
         $this->command->info('Seeding Bouncers');
         $this->call('BouncerTableSeeder');
+
+        $this->command->info('Seeding Clusters');
+        $this->call('ClusterTableSeeder');
+
+        $this->command->info('Seeding Members');
+        $this->call('MemberTableSeeder');
     }
 }
 
@@ -63,6 +69,40 @@ class BouncerTableSeeder extends Seeder {
 
         DB::table('bouncers')->delete();
         DB::table('bouncers')->insert($bball);
-        
+
+    }
+}
+
+class ClusterTableSeeder extends Seeder {
+    /**
+     * Run the bouncers seeds.
+     *
+     * @return void
+     */
+    public function run() {
+        $clusters = array(
+            array("cluster_id"=> 10,"label"=>"First test cluster", "description"=>"Primary bouncer cluster", "enabled"=>true),
+            array("cluster_id"=> 10,"label"=>"Second test cluster", "description"=>"Secondary bouncer cluster", "enabled"=>false),
+        );
+
+        DB::table('clusters')->delete();
+        DB::table('clusters')->insert($clusters);
+    }
+}
+
+class MemberTableSeeder extends Seeder {
+    /**
+     * Run the bouncers seeds.
+     *
+     * @return void
+     */
+    public function run() {
+        $cluster_members = array(
+            array("cluster_id"=> 10,"bouncer_id" => 9),
+            array("cluster_id"=> 10,"bouncer_id" => 10)
+        );
+
+        DB::table('members')->delete();
+        DB::table('members')->insert($cluster_memberss);
     }
 }

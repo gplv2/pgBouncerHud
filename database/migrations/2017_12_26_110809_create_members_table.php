@@ -18,8 +18,8 @@ class CreateMembersTable extends Migration
             $table->integer('bouncer_id')->unsigned()->nullable($value = false);
             $table->timestamps();
 
-            $table->foreign('cluster_id')->references('cluster_id')->on('clusters');
-            $table->foreign('bouncer_id')->references('bouncer_id')->on('bouncers');
+            $table->foreign('cluster_id')->references('cluster_id')->on('clusters')->onDelete('cascade');
+            $table->foreign('bouncer_id')->references('bouncer_id')->on('bouncers')->onDelete('cascade');
         });
     }
 

@@ -16,7 +16,8 @@ class CreateClustersTable extends Migration
             $table->increments('id');
             $table->integer('cluster_id')->unsigned()->unique();
             $table->string('label')->unique();
-            $table->string('description');
+            $table->string('description')->nullable($value = false);
+            $table->boolean('enabled')->default(true)->nullable($value = false);
             $table->timestamps();
         });
     }
