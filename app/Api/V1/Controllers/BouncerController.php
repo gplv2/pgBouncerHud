@@ -14,12 +14,9 @@ use Tymon\JWTAuth\Exceptions\JWTException;
 use App\Providers\HelperServiceProvider;
 
 use Dingo\Api\Routing\Helpers;
-//use Dingo\Api\Http\FormRequest;
 
 use Dingo\Api\Exception\ValidationHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-
-// ex ns App\Http\Controllers;
 
 use Illuminate\Mail\Message;
 use Illuminate\Support\Facades\Password;
@@ -44,7 +41,6 @@ use Log;
 class BouncerController extends Controller
 {
     protected $hidden = ['password', 'remember_token'];
-        // 'label', 'dsn', 'priority',
 
     use Helpers;
 
