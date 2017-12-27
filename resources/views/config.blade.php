@@ -5,6 +5,7 @@
 @section('page-style')
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <link rel="stylesheet" href="//cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
+<link href="js/jtable/themes/metro/darkgray/jtable.css" rel="stylesheet" type="text/css" />
 <!-- <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/openlayers/2.12/theme/default/style.css" media="all" /> -->
 <style>
 .ol-mouse-position {
@@ -265,7 +266,7 @@ fieldset {
       <!--Body content-->
             <div class="panel panel-default">
                 <div class="panel-heading">
-                  Bouncers
+                  Configure bouncers
                 </div>
                 <!-- <div class="panel-body" id="map-wrap"> -->
                     <div class="panel-body pusher">

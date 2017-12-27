@@ -5,7 +5,9 @@
 $( document ).ready(function() {
 
     //Prepare jTable
-    var url= "/api/bouncers/";
+    var url= "/api/bouncers";
+    var token = myLocalStorage.get('ngStorage-token');
+    var cachedCategoryOptions;
 
     $('#TableContainer').jtable({
         title: 'Table of Bouncers',
@@ -18,7 +20,7 @@ $( document ).ready(function() {
                         url: url,
                         dataType: 'json',
                         // data: JSON.stringify(fdata),
-                        data: postData,
+                        //data: postData,
                         cache: false,
                         beforeSend: function(xhr, settings) {
                             if (token) {
@@ -29,14 +31,25 @@ $( document ).ready(function() {
                             start_time = new Date().getTime();
                         },
                         success: function (data) {
-                            $dfd.resolve(data);
+                            //console.log(data);
+                            /*
+                              "Result": "OK",
+                              "Records": [ ],
+                              "TotalRecordCount": 2
+                            */
+                            var mdata = new Object ;
+                            mdata['Result']='OK';
+                            mdata['Records']=data.bouncers;
+                            mdata['TotalRecordCount']=Object.keys(data.bouncers).length;
+                            console.log(mdata);
+                            $dfd.resolve(mdata);
                         },
                         error: function () {
                             $dfd.reject();
                         }
                     }).done(function( data ) {
                         $('body').css('cursor', 'default');
-                        $('#msg').html('Found ' + Object.keys(data).length + ' results');
+                        $('#msg').html('Found ' + Object.keys(data.bouncers).length + ' results');
                         $('#msg').removeClass().addClass("alert alert-info");
                         //console.log(data);
                         var request_time = new Date().getTime() - start_time;
@@ -44,9 +57,9 @@ $( document ).ready(function() {
                             console.log( data );
                         }
 
+/*
                         //$('#mainview').empty().addClass("list-group");
                         $('#mainview').empty();
-
                         $.each(data, function(i, bouncers) {
                             if(bouncers.error) {
                                 bouncerInError(bouncers);
@@ -54,6 +67,7 @@ $( document ).ready(function() {
                                 bouncerInSuccess(bouncers,section_id);
                             }
                         });
+*/
                     }).fail(function(data) {
                         //console.log(data);
                         var request_time = new Date().getTime() - start_time;
@@ -64,34 +78,89 @@ $( document ).ready(function() {
                     });
                 });
             },
-            createAction:   '/api/bouncers',
-            updateAction:    '/api/bouncers',
+            createAction: '/api/bouncers',
+            updateAction: '/api/bouncers',
             deleteAction: '/api/bouncers'
         },
         fields: {
             id: {
+                title: 'Internal ID',
                 key: true,
                 create: false,
                 edit: false,
                 list: false
             },
             bouncer_id: {
+                title: 'Bouncer ID',
                 key: true,
                 create: true,
                 edit: true,
                 list: true
             },
+            category_id: {
+                title: 'Category',
+                    options: function () {
+                        if (cachedCategoryOptions) { //Check for cache
+                            return cachedCategoryOptions;
+                        }
+
+                        var options = [];
+
+                        $.ajax({ //Not found in cache, get from server
+                            url: 'api/categories',
+                            method: "GET",
+                            dataType: 'json',
+                            cache: false,
+                            beforeSend: function(xhr, settings) {
+                                if (token) {
+                                xhr.setRequestHeader('Authorization','Bearer ' + token);
+                                }
+                                xhr.setRequestHeader('Content-Type', 'application/json');
+                                xhr.overrideMimeType( 'application/json' );
+                                start_time = new Date().getTime();
+                            },
+                            success: function (data) {
+                                /*
+                                if (data.Result != 'OK') {
+                                    alert(data.Message);
+                                    return;
+                                }*/
+                                options = data.Options;
+                            }
+                        });
+
+                        return cachedCategoryOptions = options; //Cache results and return options
+                    }
+            },
             label: {
-                title: 'Bouncer Name',
-                width: '40%'
+                title: 'Label',
+                //width: '40%'
             },
             description: {
                 title: 'Description',
-                width: '20%'
+                //width: '20%'
+            },
+            dsn: {
+                title: 'DSN config',
+                //width: '20%'
+            },
+            priority: {
+                title: 'Priority',
+                //width: '20%'
+            },
+            enabled: {
+                title: 'Enabled',
+                //width: '20%'
             },
             tag: {
                 title: 'Tag',
-                width: '30%',
+                //width: '30%',
+                create: true,
+                edit: true
+            },
+            role: {
+                title: 'Role',
+                //width: '30%',
                 create: true,
                 edit: true
             }
@@ -100,5 +169,5 @@ $( document ).ready(function() {
 
     //Load person list from server
 
-    //$('#TableContainer').jtable('load');
+    $('#TableContainer').jtable('load');
 });

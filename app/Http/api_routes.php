@@ -41,6 +41,8 @@ $api->version('v1', function ($api) {
         $api->get('status/clients/{buid}', 'App\Api\V1\Controllers\PoolController@action');
         $api->get('status/config/{buid}', 'App\Api\V1\Controllers\PoolController@action');
         $api->get('status/current/{buid}', 'App\Api\V1\Controllers\PoolController@action');
+
+        $api->get('categories', 'App\Api\V1\Controllers\CategoryController@index');
     });
 
     // This route seems to throw an error inside, probably this format is not expected by a parser
