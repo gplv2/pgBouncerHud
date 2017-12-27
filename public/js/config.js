@@ -1,13 +1,70 @@
 /* jslint node: true, maxerr: 50, indent: 4 */
 
 "use strict";
+var categories = null;
 
 $( document ).ready(function() {
 
     //Prepare jTable
     var url= "/api/bouncers";
     var token = myLocalStorage.get('ngStorage-token');
-    var cachedCategoryOptions;
+
+    function getcategories() {
+        if (!categories) {
+            $.Deferred(function ($dfd) {
+                var options = [];
+                $.ajax({
+                    method: "GET",
+                    url: 'api/categories',
+                    dataType: 'json',
+                    cache: false,
+                    beforeSend: function(xhr, settings) {
+                        if (token) {
+                            xhr.setRequestHeader('Authorization','Bearer ' + token);
+                        }
+                        xhr.setRequestHeader('Content-Type', 'application/json');
+                        xhr.overrideMimeType( 'application/json' );
+                        start_time = new Date().getTime();
+                    },
+                    success: function (data) {
+                        var rows = [];
+
+                        $.each(data.categories, function(i, option) {
+                            rows.push({ 'DisplayText': this.name ,'Value': this.id });
+                        });
+
+                        var mdata = new Object;
+                        mdata['Result']='OK';
+                        mdata['Records']=rows;
+                        mdata['TotalRecordCount']=Object.keys(data.categories).length;
+                        if (!categories) {
+                            categories=mdata;
+                        }
+                        //console.log(mdata);
+                        //console.log(mdata);
+                        categories=rows;
+                        $dfd.resolve(rows);
+                    },
+                    error: function () {
+                        $dfd.reject();
+                    }
+                }).done(function( data ) {
+                    $('body').css('cursor', 'default');
+                }).fail(function(data) {
+                    //console.log(data);
+                    var request_time = new Date().getTime() - start_time;
+                    $('#msg').html('Failure API : ' + JSON.stringify(data.responseJSON) + ' (in ' + request_time + 'ms.)');
+                    $('#msg').removeClass().addClass("alert alert-warning");
+                }).always(function() {
+                    $('body').css('cursor', 'default');
+                });
+            });
+        }else {
+            return categories;
+        }
+    }
+
+    getcategories();
 
     $('#TableContainer').jtable({
         title: 'Table of Bouncers',
@@ -41,7 +98,7 @@ $( document ).ready(function() {
                             mdata['Result']='OK';
                             mdata['Records']=data.bouncers;
                             mdata['TotalRecordCount']=Object.keys(data.bouncers).length;
-                            console.log(mdata);
+                            //console.log(mdata);
                             $dfd.resolve(mdata);
                         },
                         error: function () {
@@ -53,7 +110,7 @@ $( document ).ready(function() {
                         $('#msg').removeClass().addClass("alert alert-info");
                         //console.log(data);
                         var request_time = new Date().getTime() - start_time;
-                        if ( console && console.log ) {
+                        if ( console && console.log && 1==0) {
                             console.log( data );
                         }
 
@@ -99,38 +156,12 @@ $( document ).ready(function() {
             },
             category_id: {
                 title: 'Category',
-                    options: function () {
-                        if (cachedCategoryOptions) { //Check for cache
-                            return cachedCategoryOptions;
+                //list: true,
+                //type: 'radiobutton',
+                options: function() {
+                            console.log(categories);
+                            return(categories);
                         }
-
-                        var options = [];
-
-                        $.ajax({ //Not found in cache, get from server
-                            url: 'api/categories',
-                            method: "GET",
-                            dataType: 'json',
-                            cache: false,
-                            beforeSend: function(xhr, settings) {
-                                if (token) {
-                                xhr.setRequestHeader('Authorization','Bearer ' + token);
-                                }
-                                xhr.setRequestHeader('Content-Type', 'application/json');
-                                xhr.overrideMimeType( 'application/json' );
-                                start_time = new Date().getTime();
-                            },
-                            success: function (data) {
-                                /*
-                                if (data.Result != 'OK') {
-                                    alert(data.Message);
-                                    return;
-                                }*/
-                                options = data.Options;
-                            }
-                        });
-
-                        return cachedCategoryOptions = options; //Cache results and return options
-                    }
             },
             label: {
                 title: 'Label',
@@ -150,7 +181,11 @@ $( document ).ready(function() {
             },
             enabled: {
                 title: 'Enabled',
-                //width: '20%'
+                list: true,
+                //options: { 'true' : 'Enabled', 'false': 'Disabled' },
+                type: 'checkbox',
+                values: { 'false': 'No', 'true': 'Yes' }
+                //width: '13%',
             },
             tag: {
                 title: 'Tag',
